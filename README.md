@@ -6,7 +6,7 @@ A unified repository containing the PyTorch/XGBoost machine learning training pi
 
 This repository is split into two core components that work together to showcase the AI Traffic Optimizer project:
 1. **The Machine Learning Pipeline (`public/ml/`):** Isolated Python scripts that generate high-fidelity synthetic time-series data, train a PyTorch LSTM and an XGBoost Regressor, and output static analytical graphs (`.png`) and model weights.
-2. **The Showcase Landing Page (`app/page.tsx`):** A responsive Next.js frontend built with React and Tailwind CSS. It serves as a comprehensive portfolio piece, detailiing AI projects and their technical stack.
+2. **The Showcase Landing Page (`app/page.tsx`):** A responsive Next.js frontend built with React and Tailwind CSS. It serves as a comprehensive portfolio piece, detailing AI projects and their technical stack.
 
 ## Tech Stack
 
