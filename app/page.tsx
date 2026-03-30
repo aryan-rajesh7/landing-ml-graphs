@@ -6,7 +6,9 @@ const TRAFFIC_DEMO_URL = "https://ai-traffic-optimizer.vercel.app/";
 const TRAFFIC_GITHUB_URL = "https://github.com/aryan-rajesh7/ai-traffic-optimizer";
 const HF_URL = "https://huggingface.co/spaces/aryan-rajesh7/ai-traffic-optimizer";
 const NEXUS_GITHUB_URL = "https://github.com/aryan-rajesh7/nexus-lex3d";
+const ML_REPO_URL = "https://github.com/aryan-rajesh7/landing-ml-graphs"; // Added ML Repo URL
 
+// Global style variables for easy adjustment
 const colors = {
   blue: "#3B82F6",
   green: "#10B981",
@@ -204,6 +206,7 @@ export default function BeautifulLightPortfolio() {
           filter: "blur(80px)", zIndex: -1, pointerEvents: "none"
         }} />
 
+        {/* --- Main Content Container --- */}
         <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, maxWidth: "1300px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
           
           <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "32px 0", borderBottom: `1px solid ${colors.border}`, marginBottom: "56px" }}>
@@ -239,6 +242,9 @@ export default function BeautifulLightPortfolio() {
             </div>
           </div>
 
+          {/* ========================================= */}
+          {/* TRAFFIC OPTIMIZER TAB                       */}
+          {/* ========================================= */}
           {activeTab === "traffic" && (
             <div className="fade-in visible" style={{ animation: "fadeIn 0.3s ease forwards" }}>
               
@@ -249,7 +255,7 @@ export default function BeautifulLightPortfolio() {
                       AI Traffic Optimizer
                     </h2>
                     <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", margin: "0 0 16px 0" }}>
-                      The AI Traffic Optimizer is a full-stack predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
+                      The AI Traffic Optimizer is a full-stack Geographic Information System (GIS) and predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
                     </p>
                     <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", margin: "0" }}>
                       The architecture establishes persistent WebSocket connections to the TomTom API to ingest live speed, flow, and incident data for any custom global address. This data is visualized via MapLibre GL JS and processed through a hybrid PyTorch LSTM and XGBoost pipeline to forecast congestion volatility, while Google's Gemini 2.5 Flash operates as a Reasoning Engine to generate human-readable mitigation strategies.
@@ -321,31 +327,8 @@ export default function BeautifulLightPortfolio() {
                 </div>
               </div>
 
-              <div className="bento-card" style={{ marginBottom: "24px" }}>
-                <div className="section-header" style={{ color: colors.purple }}>Pipeline Analytics & Visualizations</div>
-                
-                <div className="synthetic-badge">
-                  <svg style={{ width: '16px', height: '16px', marginRight: '6px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  Note: Models trained and evaluated on high-fidelity synthetic data generation scripts.
-                </div>
-                
-                <div className="grid-plots" style={{ marginTop: "16px" }}>
-                  <div>
-                    <img src="/ml/plots/prediction_vs_actual.png" alt="LSTM Prediction vs Actual" className="plot-img" />
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>LSTM: Prediction vs Actual Tracking</p>
-                  </div>
-                  <div>
-                    <img src="/ml/plots/xgboost_feature_importance.png" alt="XGBoost Feature Importance" className="plot-img" />
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>XGBoost: Decision Tree Feature Weights</p>
-                  </div>
-                  <div>
-                    <img src="/ml/plots/congestion_over_time.png" alt="Congestion Over Time" className="plot-img" />
-                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>Simulated Temporal Congestion Distribution</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bento-card" style={{ marginBottom: "64px", background: "linear-gradient(to bottom right, #ffffff, #F5F3FF)" }}>
+              {/* Machine Learning Model Architecture */}
+              <div className="bento-card" style={{ marginBottom: "24px", background: "linear-gradient(to bottom right, #ffffff, #F5F3FF)" }}>
                 <div className="section-header" style={{ color: colors.purple }}>Machine Learning Training Architecture</div>
                 <p style={{ color: colors.textSec, fontSize: "15px", lineHeight: "1.6", marginBottom: "32px", maxWidth: "900px" }}>
                   Distinct from the live web application's routing logic, the core predictive capabilities were designed, evaluated, and compiled in an isolated Python pipeline before endpoint deployment. This dual-model architecture processes both sequential time-series events and static tabular features.
@@ -378,10 +361,75 @@ export default function BeautifulLightPortfolio() {
                 </div>
               </div>
 
+              {/* ML Visualizations and Analysis */}
+              <div className="bento-card" style={{ marginBottom: "64px" }}>
+                <div className="section-header" style={{ color: colors.purple }}>Pipeline Analytics & Visualizations</div>
+                
+                <div className="synthetic-badge">
+                  <svg style={{ width: '16px', height: '16px', marginRight: '6px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  Note: Models trained and evaluated on high-fidelity synthetic data generation scripts.
+                </div>
+                
+                <div className="grid-plots" style={{ marginTop: "16px", marginBottom: "32px" }}>
+                  <div>
+                    <img src="/ml/plots/prediction_vs_actual.png" alt="LSTM Prediction vs Actual" className="plot-img" />
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>LSTM: Prediction vs Actual Tracking</p>
+                  </div>
+                  <div>
+                    <img src="/ml/plots/xgboost_feature_importance.png" alt="XGBoost Feature Importance" className="plot-img" />
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>XGBoost: Decision Tree Feature Weights</p>
+                  </div>
+                  <div>
+                    <img src="/ml/plots/congestion_over_time.png" alt="Congestion Over Time" className="plot-img" />
+                    <p style={{ fontSize: "13px", fontWeight: "600", color: colors.textMain, marginTop: "12px", textAlign: "center" }}>Simulated Temporal Congestion Distribution</p>
+                  </div>
+                </div>
+
+                {/* Graph Analysis Text & Repo Link */}
+                <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: "24px" }}>
+                  <h3 style={{ fontSize: "16px", fontWeight: "700", color: colors.textMain, marginBottom: "16px" }}>Understanding the Visualizations</h3>
+                  
+                  <div style={{ marginBottom: "16px" }}>
+                    <div style={{ fontSize: "14px", fontWeight: "700", color: colors.textMain, marginBottom: "4px" }}>1. LSTM Prediction vs. Actual Tracking</div>
+                    <p style={{ color: colors.textSec, fontSize: "14px", lineHeight: "1.6", margin: "0" }}>
+                      This graph compares the neural network's forecasted congestion scores (predicted) against the ground-truth data (actual) over sequential time steps. A tight alignment between the two lines indicates that the LSTM model successfully learned the temporal patterns and can accurately forecast upcoming traffic volume spikes based on the previous 10 readings.
+                    </p>
+                  </div>
+
+                  <div style={{ marginBottom: "16px" }}>
+                    <div style={{ marginBottom: "16px" }}>
+                    <div style={{ fontSize: "14px", fontWeight: "700", color: colors.textMain, marginBottom: "4px" }}>2. XGBoost Feature Weights (Understanding "Lags")</div>
+                    <p style={{ color: colors.textSec, fontSize: "14px", lineHeight: "1.6", margin: "0" }}>
+                      This bar chart shows which pieces of data the decision tree model relied on most to make its predictions. Notice that <strong>lag_1</strong> and <strong>lag_2</strong> are highly important. In time-series data, a "lag" simply means a past reading. Because the system processes data every 2 minutes, `lag_1` is the traffic score 2 minutes ago, and `lag_2` is the score 4 minutes ago. The model heavily relies on these immediate past readings to detect real-time upward or downward momentum in traffic volume.
+                    </p>
+                  </div>
+                  </div>
+
+                  <div style={{ marginBottom: "32px" }}>
+                    <div style={{ fontSize: "14px", fontWeight: "700", color: colors.textMain, marginBottom: "4px" }}>3. Temporal Congestion Distribution</div>
+                    <p style={{ color: colors.textSec, fontSize: "14px", lineHeight: "1.6", margin: "0" }}>
+                      This chart plots the raw synthetic dataset over a simulated 24-hour period across multiple city nodes. It verifies the integrity of the data engineering script, confirming the successful generation of cyclical traffic behavior, baseline volume, and distinct rush-hour peaks necessary for rigorous model training.
+                    </p>
+                  </div>
+
+                  {/* ML Repo Link Button */}
+                  <div style={{ display: "flex", justifyContent: "center", paddingTop: "16px", borderTop: `1px dashed ${colors.border}` }}>
+                    <a href={ML_REPO_URL} className="btn btn-secondary" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '12px 24px' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                      </svg>
+                      View Landing Page & ML Source Code
+                    </a>
+                  </div>
+                </div>
+              </div>
+
             </div>
           )}
 
-   
+          {/* ========================================= */}
+          {/* NEXUS + LEX3D TAB                           */}
+          {/* ========================================= */}
           {activeTab === "nexus" && (
             <div className="fade-in visible" style={{ animation: "fadeIn 0.3s ease forwards" }}>
               
