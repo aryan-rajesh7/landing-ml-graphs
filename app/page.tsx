@@ -8,7 +8,6 @@ const HF_URL = "https://huggingface.co/spaces/aryan-rajesh7/ai-traffic-optimizer
 const NEXUS_GITHUB_URL = "https://github.com/aryan-rajesh7/nexus-lex3d";
 const ML_REPO_URL = "https://github.com/aryan-rajesh7/landing-ml-graphs"; // Added ML Repo URL
 
-// Global style variables for easy adjustment
 const colors = {
   blue: "#3B82F6",
   green: "#10B981",
@@ -182,8 +181,7 @@ export default function BeautifulLightPortfolio() {
       `}} />
 
       <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", position: 'relative', overflow: 'hidden' }}>
-        
-        {/* --- Background UI Layers --- */}
+      
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
           backgroundImage: `linear-gradient(${colors.border} 1px, transparent 1px), linear-gradient(90deg, ${colors.border} 1px, transparent 1px)`,
@@ -206,12 +204,11 @@ export default function BeautifulLightPortfolio() {
           filter: "blur(80px)", zIndex: -1, pointerEvents: "none"
         }} />
 
-        {/* --- Main Content Container --- */}
         <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, maxWidth: "1300px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1 }}>
           
           <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "32px 0", borderBottom: `1px solid ${colors.border}`, marginBottom: "56px" }}>
             <div style={{ fontSize: "12px", fontWeight: "800", letterSpacing: "0.1em", color: colors.textMain }}>ARYAN RAJESH</div>
-            <div style={{ fontSize: "12px", color: colors.textSec, fontWeight: "500" }}>Systems & AI Engineering</div>
+            <div style={{ fontSize: "12px", color: colors.textSec, fontWeight: "500" }}>Software & AI Engineering</div>
           </header>
 
           <section className={`fade-in ${isVisible ? 'visible' : ''}`} style={{ marginBottom: "56px" }}>
@@ -242,9 +239,7 @@ export default function BeautifulLightPortfolio() {
             </div>
           </div>
 
-          {/* ========================================= */}
-          {/* TRAFFIC OPTIMIZER TAB                       */}
-          {/* ========================================= */}
+    
           {activeTab === "traffic" && (
             <div className="fade-in visible" style={{ animation: "fadeIn 0.3s ease forwards" }}>
               
@@ -255,7 +250,7 @@ export default function BeautifulLightPortfolio() {
                       AI Traffic Optimizer
                     </h2>
                     <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", margin: "0 0 16px 0" }}>
-                      The AI Traffic Optimizer is a full-stack Geographic Information System (GIS) and predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
+                      The AI Traffic Optimizer is a full-stack predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
                     </p>
                     <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", margin: "0" }}>
                       The architecture establishes persistent WebSocket connections to the TomTom API to ingest live speed, flow, and incident data for any custom global address. This data is visualized via MapLibre GL JS and processed through a hybrid PyTorch LSTM and XGBoost pipeline to forecast congestion volatility, while Google's Gemini 2.5 Flash operates as a Reasoning Engine to generate human-readable mitigation strategies.
@@ -327,7 +322,6 @@ export default function BeautifulLightPortfolio() {
                 </div>
               </div>
 
-              {/* Machine Learning Model Architecture */}
               <div className="bento-card" style={{ marginBottom: "24px", background: "linear-gradient(to bottom right, #ffffff, #F5F3FF)" }}>
                 <div className="section-header" style={{ color: colors.purple }}>Machine Learning Training Architecture</div>
                 <p style={{ color: colors.textSec, fontSize: "15px", lineHeight: "1.6", marginBottom: "32px", maxWidth: "900px" }}>
@@ -361,7 +355,6 @@ export default function BeautifulLightPortfolio() {
                 </div>
               </div>
 
-              {/* ML Visualizations and Analysis */}
               <div className="bento-card" style={{ marginBottom: "64px" }}>
                 <div className="section-header" style={{ color: colors.purple }}>Pipeline Analytics & Visualizations</div>
                 
@@ -427,9 +420,7 @@ export default function BeautifulLightPortfolio() {
             </div>
           )}
 
-          {/* ========================================= */}
-          {/* NEXUS + LEX3D TAB                           */}
-          {/* ========================================= */}
+  
           {activeTab === "nexus" && (
             <div className="fade-in visible" style={{ animation: "fadeIn 0.3s ease forwards" }}>
               
