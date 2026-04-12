@@ -253,7 +253,7 @@ export default function BeautifulLightPortfolio() {
                       The AI Traffic Optimizer is a full-stack predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
                     </p>
                     <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", margin: "0" }}>
-                      The architecture establishes persistent WebSocket connections to the TomTom API to ingest live speed, flow, and incident data for any custom global address. This data is visualized via MapLibre GL JS and processed through a hybrid PyTorch LSTM and XGBoost pipeline to forecast congestion volatility, while Google's Gemini 2.5 Flash operates as a Reasoning Engine to generate human-readable mitigation strategies.
+                      The architecture establishes persistent WebSocket connections to the TomTom API to ingest live speed, flow, and incident data for any custom global address. This data is visualized via MapLibre GL JS and processed through a hybrid PyTorch LSTM and XGBoost pipeline to forecast congestion volatility, while Google's Gemma 3 operates as a Reasoning Engine to generate human-readable mitigation strategies.
                     </p>
                   </div>
                   <div style={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
@@ -271,7 +271,7 @@ export default function BeautifulLightPortfolio() {
                   <FlowNode label="Nominatim Geocoding" type="process" />
                   <FlowNode label="TomTom Traffic API" type="input" />
                   <FlowNode label="FastAPI (Python)" type="process" />
-                  <FlowNode label="Gemini 2.5 Flash RAG" type="ai" />
+                  <FlowNode label="Gemma 3.0 RAG" type="ai" />
                   <FlowNode label="WebSocket Stream" type="process" />
                   <FlowNode label="MapLibre GL Client" type="output" isLast={true} />
                 </div>
@@ -294,8 +294,8 @@ export default function BeautifulLightPortfolio() {
                       desc: "To bypass the HTTP overhead of continuous client-side polling, the backend establishes a duplex WebSocket connection. A background `asyncio` task polls the TomTom endpoints every 30 seconds, instantly pushing localized JSON dataframes over the active socket connection to maintain strict real-time parity." 
                     },
                     { 
-                      aspect: "4. Reasoning Engine Integration (Gemini 2.5 Flash RAG)", 
-                      desc: "The platform utilizes Google's Gemini 2.5 Flash model to execute Retrieval-Augmented Generation. Live numerical traffic data is serialized and injected into a structured system prompt, forcing the LLM to ground its output in current street reality and generate specific, actionable signal timing modifications." 
+                      aspect: "4. Reasoning Engine Integration (Gemma 3.0 RAG)", 
+                      desc: "The platform utilizes Google's Gemma 3.0 model to execute Retrieval-Augmented Generation. Live numerical traffic data is serialized and injected into a structured system prompt, forcing the LLM to ground its output in current street reality and generate specific, actionable signal timing modifications." 
                     },
                     { 
                       aspect: "5. Geospatial Vector Rendering (MapLibre GL JS)", 
@@ -310,8 +310,8 @@ export default function BeautifulLightPortfolio() {
                       desc: "Python's FastAPI serves as the routing layer, selected for its ASGI compatibility and Pydantic validation. Deployed via Uvicorn, the asynchronous event loop prevents I/O blocking when managing concurrent TomTom API network requests, LLM inferences, and active WebSocket clients." 
                     },
                     { 
-                      aspect: "8. Request Throttling & Security (SlowAPI/CORS)", 
-                      desc: "To mitigate external API exhaustion and protect the TomTom/Gemini API keys, the backend implements SlowAPI for strict IP-based rate limiting (10 requests per minute). It also enforces restrictive CORS middleware, explicitly isolating access to the Vercel frontend and Hugging Face domains." 
+                      aspect: "8. Security (CORS)", 
+                      desc: "To mitigate protect the TomTom/Gemini API keys and prevent calls of the backend from malicious websites, the backend enforces restrictive CORS middleware, explicitly isolating access to the Vercel frontend and Hugging Face domains." 
                     }
                   ].map(item => (
                     <div key={item.aspect} className="stack-list-item" style={{ borderBottom: 'none', padding: '12px 0' }}>
