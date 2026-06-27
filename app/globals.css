@@ -433,20 +433,62 @@ footer {
 .loader-wrapper {
   position: fixed;
   inset: 0;
-  background: var(--bg-primary);
+  background: #000000;
   z-index: 9999;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .loader-wrapper.hidden {
   opacity: 0;
   pointer-events: none;
+  transform: scale(1.05);
 }
+
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.loader-bar-container {
+  width: 200px;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.loader-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 0%;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+  animation: loadProgress 0.6s cubic-bezier(0.8, 0, 0.2, 1) forwards;
+}
+
+@keyframes loadProgress {
+  0% { width: 0%; }
+  50% { width: 60%; }
+  100% { width: 100%; }
+}
+
 .loader-text {
-  font-size: 16px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
+  font-family: monospace;
+  font-size: 13px;
   color: var(--text-secondary);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  animation: pulseText 0.4s infinite alternate;
+}
+
+@keyframes pulseText {
+  from { opacity: 0.5; }
+  to { opacity: 1; }
 }

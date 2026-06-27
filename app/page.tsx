@@ -34,7 +34,7 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
+    const timer = setTimeout(() => setLoading(false), 800);
     return () => clearTimeout(timer);
   }, []);
 
@@ -42,8 +42,11 @@ export default function Home() {
     <div className="app-container">
       {/* LOADING SCREEN */}
       <div className={`loader-wrapper ${loading ? "" : "hidden"}`}>
-        <div className="loader-text">
-          <span className="loader-text-inner">Aryan Rajesh</span>
+        <div className="loader-content">
+          <div className="loader-bar-container">
+            <div className="loader-bar"></div>
+          </div>
+          <div className="loader-text">INITIALIZING</div>
         </div>
       </div>
 
