@@ -1,608 +1,627 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
+// Project Links
 const TRAFFIC_DEMO_URL = "https://ai-traffic-optimizer.vercel.app/";
 const TRAFFIC_GITHUB_URL = "https://github.com/aryan-rajesh7/ai-traffic-optimizer";
 const HF_URL = "https://huggingface.co/spaces/aryan-rajesh7/ai-traffic-optimizer";
 const NEXUS_GITHUB_URL = "https://github.com/aryan-rajesh7/nexus-lex3d";
 const ML_REPO_URL = "https://github.com/aryan-rajesh7/landing-ml-graphs";
 
-type ProjectId = "traffic" | "nexus" | null;
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
 
-const SplitView = ({ tag, title }: { tag: string; title: string }) => (
-  <div className="split-view">
-    <div className="split-tag">{tag}</div>
-    <div className="split-view-bottom">
-      <h2 className="split-title">{title}</h2>
-      <div className="arrow-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      </div>
+const Reveal = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => {
+  const ref = useScrollReveal();
+  return (
+    <div ref={ref} className={`scroll-reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
     </div>
-  </div>
-);
-
-const InactiveView = ({ title }: { title: string }) => (
-  <div className="inactive-view">
-    <div className="vertical-title">{title}</div>
-  </div>
-);
+  );
+};
 
 export default function ProfessionalPortfolio() {
-  const [activeProject, setActiveProject] = useState<ProjectId>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Hide loader after 2s
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
-    <div className="layout">
+    <div className="app-container">
       <style dangerouslySetInnerHTML={{ __html: `
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+        /* --- GLOBAL STYLES --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
 
-        * { box-sizing: border-box; }
+        :root {
+          --bg-primary: #FAFAFA;
+          --bg-secondary: #FFFFFF;
+          --text-primary: #111827;
+          --text-secondary: #4B5563;
+          --text-tertiary: #9CA3AF;
+          --accent: #2563EB;
+          --border: #E5E7EB;
+        }
 
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
-          background: #000;
-          color: #fafafa;
-          font-family: 'Inter', sans-serif;
-          margin: 0;
-          padding: 0;
-          overflow: hidden;
-          -webkit-font-smoothing: antialiased;
-        }
-
-        .layout {
-          display: flex;
-          height: 100vh;
-          width: 100vw;
-          padding: 16px;
-          gap: 16px;
-        }
-
-        .sidebar {
-          width: 300px;
-          background: #09090b;
-          border: 1px solid #27272a;
-          border-radius: 12px;
-          padding: 32px 24px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          flex-shrink: 0;
-        }
-
-        .profile-name {
-          font-size: 24px;
-          font-weight: 600;
-          letter-spacing: -0.03em;
-          margin: 0 0 4px 0;
-        }
-
-        .profile-role {
-          font-size: 14px;
-          color: #a1a1aa;
-          font-weight: 400;
-          margin: 0;
-        }
-
-        .profile-desc {
-          font-size: 13px;
-          color: #71717a;
+          background-color: var(--bg-primary);
+          color: var(--text-primary);
+          font-family: 'Inter', -apple-system, sans-serif;
           line-height: 1.6;
-          margin-bottom: 24px;
+          overflow-x: hidden;
         }
 
-        .main-stage {
-          flex-grow: 1;
-          display: flex;
-          gap: 16px;
-          overflow: hidden;
-        }
-
-        .project-panel {
-          background: #09090b;
-          border: 1px solid #27272a;
-          border-radius: 12px;
-          transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-          display: flex;
-          flex-direction: column;
-          overflow: hidden;
-          position: relative;
-        }
-
-        .project-panel.split {
-          flex: 1;
-          cursor: pointer;
-        }
-        .project-panel.split:hover {
-          background: #0c0c0e;
-          border-color: #3f3f46;
-        }
-
-        .project-panel.active {
-          flex: 0 0 calc(95% - 16px);
-          cursor: default;
-          border-color: #3f3f46;
-        }
-
-        .project-panel.inactive {
-          flex: 0 0 5%;
-          cursor: pointer;
-          background: #050505;
-        }
-        .project-panel.inactive:hover {
-          background: #0c0c0e;
-          border-color: #3f3f46;
-        }
-
-        /* Internal views */
-        .view-container {
-          position: absolute;
+        /* --- LOADING SCREEN --- */
+        .loader-wrapper {
+          position: fixed;
           inset: 0;
-          transition: opacity 0.4s ease;
+          background: var(--bg-secondary);
+          z-index: 9999;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .loader-wrapper.hidden {
           opacity: 0;
           pointer-events: none;
+          transform: translateY(-20px);
         }
-        .view-container.visible {
+        
+        .loader-text {
+          font-size: 24px;
+          font-weight: 700;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          position: relative;
+          overflow: hidden;
+        }
+        .loader-text::after {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: var(--accent);
+          transform: translateX(-100%);
+          animation: swipe 1.5s cubic-bezier(0.7, 0, 0.3, 1) forwards;
+        }
+        @keyframes swipe {
+          0% { transform: translateX(-100%); }
+          50% { transform: translateX(0); }
+          100% { transform: translateX(100%); }
+        }
+        .loader-text-inner {
+          opacity: 0;
+          animation: revealText 0.1s forwards 0.75s;
+        }
+        @keyframes revealText {
+          to { opacity: 1; }
+        }
+
+        /* --- LAYOUT & REVEAL --- */
+        .main-content {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 0 24px;
+        }
+
+        .scroll-reveal {
+          opacity: 0;
+          transform: translateY(30px);
+          transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .scroll-reveal.revealed {
           opacity: 1;
-          pointer-events: auto;
-          transition-delay: 0.2s;
+          transform: translateY(0);
         }
 
-        /* Split View Styles */
-        .split-view {
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          height: 100%;
-          padding: 48px;
-        }
-        .split-view-bottom {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-        }
-        .split-tag {
-          font-family: 'JetBrains Mono', monospace;
+        /* --- SECTION HEADERS --- */
+        .section-header {
           font-size: 13px;
-          color: #71717a;
+          font-weight: 700;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
-        }
-        .split-title {
-          font-size: 40px;
-          font-weight: 500;
-          letter-spacing: -0.04em;
-          margin: 0;
-          max-width: 350px;
-          line-height: 1.1;
-        }
-        .arrow-icon {
-          width: 48px;
-          height: 48px;
-          border-radius: 50%;
-          border: 1px solid #27272a;
+          letter-spacing: 0.15em;
+          color: var(--accent);
+          margin-bottom: 40px;
           display: flex;
           align-items: center;
-          justify-content: center;
-          color: #fafafa;
-          transition: all 0.3s ease;
+          gap: 16px;
         }
-        .project-panel.split:hover .arrow-icon {
-          transform: translateX(8px);
-          background: #fafafa;
-          color: #000;
-          border-color: #fafafa;
-        }
-
-        /* Inactive View Styles */
-        .inactive-view {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          height: 100%;
-          width: 100%;
-          padding: 32px 0;
-        }
-        .vertical-title {
-          writing-mode: vertical-rl;
-          text-orientation: mixed;
-          transform: rotate(180deg);
-          white-space: nowrap;
-          font-size: 13px;
-          font-family: 'JetBrains Mono', monospace;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: #52525b;
-          transition: color 0.3s;
-        }
-        .project-panel.inactive:hover .vertical-title {
-          color: #fafafa;
-        }
-
-        /* Active View Styles */
-        .active-view {
-          display: flex;
-          flex-direction: column;
-          height: 100%;
-        }
-        .active-header {
-          padding: 32px 48px;
-          border-bottom: 1px solid #1f1f1f;
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-start;
-          flex-shrink: 0;
-          background: #09090b;
-          z-index: 10;
-        }
-        .active-title {
-          font-size: 32px;
-          font-weight: 500;
-          letter-spacing: -0.03em;
-          margin: 0 0 16px 0;
-        }
-        .active-desc {
-          font-size: 14px;
-          color: #a1a1aa;
-          max-width: 800px;
-          line-height: 1.6;
-          margin: 0;
-        }
-        .close-btn {
-          background: transparent;
-          border: 1px solid #27272a;
-          color: #a1a1aa;
-          width: 40px;
-          height: 40px;
-          border-radius: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-        .close-btn:hover {
-          background: #27272a;
-          color: #fafafa;
-        }
-        .active-content {
+        .section-header::after {
+          content: '';
           flex-grow: 1;
-          overflow-y: auto;
-          padding: 48px;
-        }
-        .active-content::-webkit-scrollbar {
-          width: 6px;
-        }
-        .active-content::-webkit-scrollbar-track {
-          background: #09090b; 
-        }
-        .active-content::-webkit-scrollbar-thumb {
-          background: #27272a; 
-          border-radius: 3px;
-        }
-        .active-content::-webkit-scrollbar-thumb:hover {
-          background: #3f3f46; 
+          height: 1px;
+          background: var(--border);
         }
 
-        /* Technical Table */
-        .tech-table {
-          width: 100%;
-          border-collapse: collapse;
-          margin-bottom: 56px;
-        }
-        .tech-table td {
-          padding: 24px 0;
-          border-bottom: 1px solid #18181b;
-          vertical-align: top;
-        }
-        .tech-table td.key {
-          width: 250px;
-          color: #71717a;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
-          padding-right: 24px;
-        }
-        .tech-table td.value {
-          color: #d4d4d8;
-          font-size: 14px;
-          line-height: 1.7;
-        }
-        .tech-table tr:last-child td {
-          border-bottom: none;
-        }
-
-        /* Pipeline */
-        .pipeline {
+        /* --- HERO --- */
+        .hero {
+          min-height: 100vh;
           display: flex;
-          align-items: center;
-          gap: 12px;
-          overflow-x: auto;
-          padding: 16px 0;
-          margin-bottom: 56px;
-          scrollbar-width: none;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
         }
-        .pipeline::-webkit-scrollbar { display: none; }
-        .pipeline-node {
-          background: #000;
-          border: 1px solid #1f1f1f;
-          padding: 12px 20px;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
-          color: #fafafa;
-          white-space: nowrap;
-          border-radius: 6px;
-        }
-        .pipeline-arrow {
-          color: #3f3f46;
-        }
-
-        .section-label {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 12px;
-          color: #52525b;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
+        .hero-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(4rem, 10vw, 8rem);
+          font-weight: 700;
+          line-height: 0.9;
+          letter-spacing: -0.02em;
+          color: var(--text-primary);
           margin-bottom: 24px;
-          display: block;
         }
-
-        .action-links {
+        .hero-subtitle {
+          font-size: clamp(1.2rem, 3vw, 2rem);
+          font-weight: 400;
+          color: var(--text-secondary);
+          margin-bottom: 32px;
+        }
+        .hero-links {
           display: flex;
-          gap: 12px;
-          margin-top: 24px;
-        }
-        .action-link {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 20px;
-          background: #fafafa;
-          color: #000;
-          font-size: 13px;
+          gap: 24px;
+          font-size: 15px;
           font-weight: 500;
+          flex-wrap: wrap;
+        }
+        .hero-link {
+          color: var(--text-primary);
           text-decoration: none;
-          border-radius: 6px;
-          transition: opacity 0.2s;
+          position: relative;
+          padding-bottom: 4px;
         }
-        .action-link:hover {
-          opacity: 0.8;
+        .hero-link::after {
+          content: '';
+          position: absolute;
+          bottom: 0; left: 0; right: 0; height: 1px;
+          background: var(--text-primary);
+          transform: scaleX(0);
+          transform-origin: right;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .action-link.secondary {
-          background: transparent;
-          color: #fafafa;
-          border: 1px solid #27272a;
-        }
-        .action-link.secondary:hover {
-          background: #18181b;
-          opacity: 1;
+        .hero-link:hover::after {
+          transform: scaleX(1);
+          transform-origin: left;
         }
 
-        .plot-grid {
+        /* --- EXPERIENCE TIMELINE --- */
+        .section {
+          padding: 80px 0;
+        }
+        .timeline {
+          border-left: 2px solid var(--border);
+          padding-left: 40px;
+          margin-left: 12px;
+          display: flex;
+          flex-direction: column;
+          gap: 64px;
+        }
+        .timeline-item {
+          position: relative;
+        }
+        .timeline-item::before {
+          content: '';
+          position: absolute;
+          left: -49px;
+          top: 6px;
+          width: 16px;
+          height: 16px;
+          background: var(--bg-secondary);
+          border: 2px solid var(--accent);
+          border-radius: 50%;
+          transition: background 0.3s;
+        }
+        .timeline-item:hover::before {
+          background: var(--accent);
+        }
+        .exp-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          flex-wrap: wrap;
+          gap: 16px;
+          margin-bottom: 8px;
+        }
+        .exp-role {
+          font-size: 22px;
+          font-weight: 700;
+          color: var(--text-primary);
+        }
+        .exp-date {
+          font-size: 14px;
+          color: var(--text-tertiary);
+          font-weight: 500;
+        }
+        .exp-company {
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--accent);
+          margin-bottom: 16px;
+        }
+        .exp-bullets {
+          list-style-type: none;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+        .exp-bullets li {
+          font-size: 15px;
+          color: var(--text-secondary);
+          position: relative;
+          padding-left: 20px;
+        }
+        .exp-bullets li::before {
+          content: '—';
+          position: absolute;
+          left: 0;
+          color: var(--text-tertiary);
+        }
+
+        /* --- PROJECTS --- */
+        .projects-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 24px;
+          grid-template-columns: 1fr;
+          gap: 64px;
+        }
+        .project-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: 24px;
+          padding: 48px;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .project-card:hover {
+          box-shadow: 0 40px 80px -20px rgba(0,0,0,0.08);
+          transform: translateY(-8px);
+          border-color: rgba(37, 99, 235, 0.2);
+        }
+        .project-title {
+          font-size: 32px;
+          font-weight: 700;
+          margin-bottom: 16px;
+          letter-spacing: -0.02em;
+        }
+        .project-stack {
+          font-size: 13px;
+          color: var(--text-tertiary);
+          font-family: monospace;
+          margin-bottom: 24px;
+          line-height: 1.5;
+        }
+        .project-desc {
+          font-size: 16px;
+          color: var(--text-secondary);
+          margin-bottom: 32px;
+        }
+        .project-bullets {
+          list-style: none;
+          display: flex;
+          flex-direction: column;
+          gap: 16px;
           margin-bottom: 40px;
         }
-        .plot-box {
-          border: 1px solid #1f1f1f;
-          background: #050505;
-          padding: 24px;
+        .project-bullets li {
+          font-size: 15px;
+          color: var(--text-secondary);
+          padding-left: 24px;
+          position: relative;
+        }
+        .project-bullets li::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 8px;
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--accent);
+        }
+        
+        .btn-group {
+          display: flex;
+          gap: 16px;
+          flex-wrap: wrap;
+        }
+        .btn {
+          padding: 12px 24px;
           border-radius: 8px;
+          font-size: 14px;
+          font-weight: 600;
+          text-decoration: none;
+          transition: all 0.3s;
+          display: inline-flex;
+          align-items: center;
         }
-        .plot-img {
-          width: 100%;
-          display: block;
-          border: 1px solid #1f1f1f;
-          border-radius: 4px;
+        .btn-primary {
+          background: var(--text-primary);
+          color: var(--bg-secondary);
         }
-        .plot-caption {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px;
-          color: #71717a;
-          margin-top: 16px;
+        .btn-primary:hover {
+          background: var(--accent);
+          transform: translateY(-2px);
+        }
+        .btn-outline {
+          background: transparent;
+          color: var(--text-primary);
+          border: 1px solid var(--border);
+        }
+        .btn-outline:hover {
+          border-color: var(--text-primary);
+        }
+
+        /* --- SKILLS --- */
+        .skills-container {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+        }
+        .skill-pill {
+          padding: 10px 18px;
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: 100px;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--text-primary);
+          transition: all 0.3s;
+        }
+        .skill-pill:hover {
+          border-color: var(--accent);
+          color: var(--accent);
+          box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+          transform: translateY(-2px);
+        }
+
+        /* --- EDUCATION --- */
+        .edu-card {
+          background: var(--bg-secondary);
+          border: 1px solid var(--border);
+          border-radius: 24px;
+          padding: 40px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 24px;
+        }
+        .edu-school {
+          font-size: 24px;
+          font-weight: 700;
+          margin-bottom: 8px;
+        }
+        .edu-degree {
+          font-size: 16px;
+          color: var(--text-secondary);
+        }
+
+        /* Footer */
+        footer {
           text-align: center;
+          padding: 80px 24px;
+          font-size: 14px;
+          color: var(--text-tertiary);
+          border-top: 1px solid var(--border);
+        }
+
+        @media (max-width: 768px) {
+          .hero-title { font-size: 3.5rem; }
+          .hero-subtitle { font-size: 1.5rem; }
+          .timeline { padding-left: 24px; }
+          .timeline-item::before { left: -33px; }
+          .project-card { padding: 24px; }
+          .edu-card { padding: 24px; flex-direction: column; align-items: flex-start; }
+          .edu-card > div:last-child { text-align: left; }
         }
       `}} />
 
-      <div className="sidebar">
-        <div>
-          <h1 className="profile-name">ARYAN RAJESH</h1>
-          <h2 className="profile-role">Software & AI Engineering</h2>
-        </div>
-        
-        <div style={{ marginTop: 'auto' }}>
-          <p className="profile-desc">
-            Building and deploying full-stack AI solutions that integrate data, models, and applications.
-            Focused on creating scalable pipelines for cloud and local environments.
-          </p>
-          <div style={{ fontSize: '10px', color: '#52525b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-            © {new Date().getFullYear()}
-          </div>
+      {/* LOADING SCREEN */}
+      <div className={`loader-wrapper ${loading ? "" : "hidden"}`}>
+        <div className="loader-text">
+          <span className="loader-text-inner">Aryan Rajesh</span>
         </div>
       </div>
 
-      <div className="main-stage">
+      <div className="main-content">
         
-        {/* ======================= */}
-        {/* AI TRAFFIC OPTIMIZER */}
-        {/* ======================= */}
-        <div 
-          className={`project-panel ${activeProject === null ? 'split' : activeProject === 'traffic' ? 'active' : 'inactive'}`}
-          onClick={() => { if (activeProject !== 'traffic') setActiveProject('traffic') }}
-        >
-          {/* Split View */}
-          <div className={`view-container ${activeProject === null ? 'visible' : ''}`}>
-            <SplitView tag="01 / Cloud Telemetry" title="AI Traffic Optimizer" />
-          </div>
+        {/* HERO */}
+        <section className="hero">
+          <Reveal>
+            <h1 className="hero-title">Aryan Rajesh</h1>
+          </Reveal>
+          <Reveal delay={150}>
+            <h2 className="hero-subtitle">Software & AI Engineering</h2>
+          </Reveal>
+          <Reveal delay={300}>
+            <div className="hero-links">
+              <a href="https://github.com/aryan-rajesh7" target="_blank" rel="noopener noreferrer" className="hero-link">GitHub</a>
+              <a href="https://linkedin.com/in/aryan-rajesh7" target="_blank" rel="noopener noreferrer" className="hero-link">LinkedIn</a>
+              <a href="mailto:aryan.raj@hotmail.com" className="hero-link">Email</a>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* EXPERIENCE */}
+        <section className="section">
+          <Reveal>
+            <div className="section-header">Experience</div>
+          </Reveal>
           
-          {/* Inactive View */}
-          <div className={`view-container ${activeProject === 'nexus' ? 'visible' : ''}`}>
-            <InactiveView title="AI Traffic Optimizer" />
+          <div className="timeline">
+            {[
+              {
+                role: "AI Engineer Intern",
+                company: "Flowers Foods | Thomasville, GA (Remote)",
+                date: "June 2026 - Present",
+                bullets: [
+                  "Build and maintain evaluation scenarios for AI agents powered by LLMs, testing multi-turn reasoning, intent recognition, and response quality across realistic conversational flows and integrated systems",
+                  "Validate end-to-end AI workflows by assessing LLM outputs, API responses, context retention, and system reliability under varied prompts, helping improve overall agent performance through structured testing and feedback loops",
+                  "Design test cases to evaluate LLM behavior and API interactions, including edge cases, hallucination detection, tool/API calling accuracy, and response consistency across different inputs"
+                ]
+              },
+              {
+                role: "Machine Learning Research Assistant",
+                company: "University of California, Irvine | Irvine, CA",
+                date: "May 2026 - Present",
+                bullets: [
+                  "Conduct research on a MiniAn-based machine learning pipeline for 1-photon mouse neuron imaging, supporting the development of a computer vision algorithm for publication",
+                  "Develop and evaluate denoising models within the MiniAn pipeline to improve image quality in noisy neuronal imaging datasets for neuron detection",
+                  "Design benchmarking workflows to compare preprocessing and denoising methods across varying noise conditions and evaluate model performance"
+                ]
+              },
+              {
+                role: "AI/ML Engineer Intern",
+                company: "LangPal | Seattle, WA (Remote)",
+                date: "Apr. 2026 - June 2026",
+                bullets: [
+                  "Developed end-to-end machine learning and NLP systems for a language-learning platform, collaborating closely with founders to ship core product features that improved user engagement",
+                  "Built conversational AI, speech-recognition, NLP, and computer-vision capabilities enabling personalized learning experiences that increased user retention",
+                  "Owned the full ML lifecycle including data pipelines, model training, evaluation, and production deployment, reducing inference latency and streamlining production workflows"
+                ]
+              },
+              {
+                role: "AI Agents Fellow",
+                company: "MergeWorks | Dallas, TX (Remote)",
+                date: "Feb. 2026 - May 2026",
+                bullets: [
+                  "Designed real-time Instagram DM automation using webhooks and n8n workflows to capture, process, and route incoming client inquiries into a centralized decision engine, reducing manual workload by ~60%",
+                  "Developed custom API integrations within n8n to securely transform unstructured message data and trigger automated workflows across connected services",
+                  "Implemented RAG (Retrieval-Augmented Generation) pipelines to retrieve relevant business knowledge and client context, enabling accurate, context-aware automated responses"
+                ]
+              },
+              {
+                role: "Software Application Development Summer Intern",
+                company: "Bluemind Solutions | Fremont, CA (Remote)",
+                date: "June 2024 - August 2024",
+                bullets: [
+                  "Developed a Generative AI chatbot using Microsoft Copilot Studio to deliver accurate, detailed responses to inquiries",
+                  "Improved response accuracy and domain relevance by ~30% by using public company datasets to improve query resolution",
+                  "Designed and implemented a proprietary dataset to optimize the knowledge base for high-precision information retrieval"
+                ]
+              }
+            ].map((exp, idx) => (
+              <Reveal key={idx} delay={idx * 100} className="timeline-item">
+                <div className="exp-header">
+                  <div className="exp-role">{exp.role}</div>
+                  <div className="exp-date">{exp.date}</div>
+                </div>
+                <div className="exp-company">{exp.company}</div>
+                <ul className="exp-bullets">
+                  {exp.bullets.map((b, i) => <li key={i}>{b}</li>)}
+                </ul>
+              </Reveal>
+            ))}
           </div>
+        </section>
 
-          {/* Active View */}
-          <div className={`view-container ${activeProject === 'traffic' ? 'visible' : ''}`}>
-            <div className="active-view">
-              <div className="active-header">
-                <div>
-                  <h2 className="active-title">AI Traffic Optimizer</h2>
-                  <p className="active-desc">
-                    A full-stack predictive modeling platform replacing static timing models with dynamically generated signal strategies based on live network conditions via TomTom API and Gemma 3.0 RAG.
-                  </p>
-                  <div className="action-links">
-                    <a href={TRAFFIC_DEMO_URL} className="action-link" target="_blank" rel="noopener noreferrer">Live Deployment</a>
-                    <a href={TRAFFIC_GITHUB_URL} className="action-link secondary" target="_blank" rel="noopener noreferrer">Source Code</a>
-                    <a href={HF_URL} className="action-link secondary" target="_blank" rel="noopener noreferrer">Model Backend</a>
-                  </div>
-                </div>
-                <button className="close-btn" onClick={(e) => { e.stopPropagation(); setActiveProject(null); }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
-              <div className="active-content">
-                <span className="section-label">Live App Data Flow</span>
-                <div className="pipeline">
-                  {['Client (Next.js)', 'Nominatim API', 'TomTom Telemetry', 'FastAPI', 'Gemma 3.0', 'WebSocket', 'MapLibre GL'].map((step, i, arr) => (
-                    <React.Fragment key={i}>
-                      <div className="pipeline-node">{step}</div>
-                      {i < arr.length - 1 && <div className="pipeline-arrow">→</div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-
-                <span className="section-label">Architecture Specs</span>
-                <table className="tech-table">
-                  <tbody>
-                    <tr>
-                      <td className="key">01. Address Resolution</td>
-                      <td className="value">Asynchronous forward-geocoding via Nominatim API translates natural language addresses into precise floating-point coordinates for spatial indexing.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">02. Dynamic Telemetry</td>
-                      <td className="value">Queries the TomTom Traffic Flow API for highly granular JSON payloads containing current street speeds, free-flow speeds, and closures.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">03. Persistent Sockets</td>
-                      <td className="value">Bypasses HTTP overhead. An asyncio task polls endpoints every 30s, pushing localized JSON dataframes over active sockets to maintain real-time parity.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">04. Reasoning Engine</td>
-                      <td className="value">Google's Gemma 3.0 executes RAG. Live numerical data is injected into a structured prompt, forcing grounded output and specific signal timing mods.</td>
-                    </tr>
-                  </tbody>
-                </table>
-
-                <span className="section-label">Model Analytics (Synthetic Data)</span>
-                <div className="plot-grid">
-                  <div className="plot-box">
-                    <img src="/ml/plots/prediction_vs_actual.png" alt="LSTM Tracking" className="plot-img" />
-                    <div className="plot-caption">fig 1. LSTM Tracking</div>
-                  </div>
-                  <div className="plot-box">
-                    <img src="/ml/plots/xgboost_feature_importance.png" alt="XGBoost Weights" className="plot-img" />
-                    <div className="plot-caption">fig 2. XGBoost Feature Weights</div>
-                  </div>
-                  <div className="plot-box">
-                    <img src="/ml/plots/congestion_over_time.png" alt="Distribution" className="plot-img" />
-                    <div className="plot-caption">fig 3. Congestion Distribution</div>
-                  </div>
-                </div>
+        {/* PROJECTS */}
+        <section className="section">
+          <Reveal>
+            <div className="section-header">Projects</div>
+          </Reveal>
+          
+          <div className="projects-grid">
+            {/* AI Traffic Optimizer */}
+            <Reveal delay={100}>
+              <div className="project-card">
+                <h3 className="project-title">AI Traffic Optimizer</h3>
+                <div className="project-stack">Python, Typescript, C++, PyTorch, XGBoost, HTML, CSS, scikit-learn, NumPy, pandas, Gemini 2.0 Flash, LangChain, RAG, Docker</div>
                 
-                <div style={{ paddingBottom: '24px' }}>
-                  <a href={ML_REPO_URL} className="action-link secondary" target="_blank" rel="noopener noreferrer">View ML Source & Training Scripts →</a>
+                <ul className="project-bullets">
+                  <li>Engineered a real-time traffic monitoring full-stack application, integrating the TomTom Flow API via WebSockets to visualize live congestion across US cities on custom MapLibre GL maps</li>
+                  <li>Architected a stateless RAG-style pipeline ingesting live sensor data to generate real-time traffic signal timing recommendations using Gemini 2.0 Flash with precise green/yellow/red phases</li>
+                  <li>Optimized congestion scoring algorithms using C++ and pybind11 to reduce computation time by 10%; deployed PyTorch LSTM/XGBoost models and containerized the backend with Docker</li>
+                </ul>
+                
+                <div className="btn-group">
+                  <a href={TRAFFIC_DEMO_URL} className="btn btn-primary" target="_blank" rel="noopener noreferrer">Live App</a>
+                  <a href={TRAFFIC_GITHUB_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">GitHub</a>
+                  <a href={HF_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">Hugging Face Backend</a>
+                  <a href={ML_REPO_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">ML Training Repo</a>
                 </div>
+              </div>
+            </Reveal>
+
+            {/* Nexus + Lex3D */}
+            <Reveal delay={200}>
+              <div className="project-card">
+                <h3 className="project-title">Nexus + Lex3D Framework</h3>
+                <div className="project-stack">Python, PyTorch (MPS), Diffusers, OpenCV, HuggingFace, Trimesh</div>
+                
+                <ul className="project-bullets">
+                  <li>An offline, cross-modal generative framework engineered for local execution on consumer hardware, utilizing PyTorch's Metal Performance Shaders (MPS) backend for Apple Silicon acceleration.</li>
+                  <li>Nexus chains multiple diffusion models (SD v1.5 to SVD) for automated text-to-video multimedia generation.</li>
+                  <li>Lex3D synthesizes printable 3D topologies directly from semantic prompts via Neural Radiance Fields (OpenAI Shap-E) and exports standardized STL geometry.</li>
+                </ul>
+                
+                <div className="btn-group">
+                  <a href={NEXUS_GITHUB_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+        </section>
+
+        {/* TECHNICAL SKILLS */}
+        <section className="section">
+          <Reveal>
+            <div className="section-header">Technical Skills</div>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="skills-container">
+              {['Python', 'Java', 'JavaScript', 'TypeScript', 'C++', 'SQL', 'PyTorch', 'TensorFlow', 'Scikit-learn', 'Pandas', 'XGBoost', 'LangChain', 'RAG', 'PostgreSQL', 'REST APIs', 'Power Platform', 'Docker', 'Node.js', 'Copilot Studio', 'Kubernetes', 'AWS', 'Claude', 'Codex', 'Azure'].map((skill, i) => (
+                <div key={i} className="skill-pill">{skill}</div>
+              ))}
+            </div>
+          </Reveal>
+        </section>
+
+        {/* EDUCATION */}
+        <section className="section" style={{ paddingBottom: '80px' }}>
+          <Reveal>
+            <div className="section-header">Education</div>
+          </Reveal>
+          <Reveal delay={100}>
+            <div className="edu-card">
+              <div>
+                <div className="edu-school">University of California, Irvine</div>
+                <div className="edu-degree">Bachelor of Science in Computer Science (AI Specialization)</div>
+                <div style={{ marginTop: '12px', fontSize: '14px', color: 'var(--text-secondary)' }}>Class Standing: Senior</div>
+              </div>
+              <div style={{ textAlign: 'right' }}>
+                <div style={{ fontSize: '16px', fontWeight: '600', color: 'var(--text-primary)' }}>Irvine, CA</div>
+                <div style={{ fontSize: '14px', color: 'var(--text-tertiary)', marginTop: '4px' }}>Expected Dec. 2027</div>
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* ======================= */}
-        {/* NEXUS + LEX 3D */}
-        {/* ======================= */}
-        <div 
-          className={`project-panel ${activeProject === null ? 'split' : activeProject === 'nexus' ? 'active' : 'inactive'}`}
-          onClick={() => { if (activeProject !== 'nexus') setActiveProject('nexus') }}
-        >
-          {/* Split View */}
-          <div className={`view-container ${activeProject === null ? 'visible' : ''}`}>
-            <SplitView tag="02 / Local Compute" title="Nexus + Lex3D Suite" />
-          </div>
-          
-          {/* Inactive View */}
-          <div className={`view-container ${activeProject === 'traffic' ? 'visible' : ''}`}>
-            <InactiveView title="Nexus + Lex3D Suite" />
-          </div>
-
-          {/* Active View */}
-          <div className={`view-container ${activeProject === 'nexus' ? 'visible' : ''}`}>
-            <div className="active-view">
-              <div className="active-header">
-                <div>
-                  <h2 className="active-title">Nexus + Lex3D Suite</h2>
-                  <p className="active-desc">
-                    An offline, cross-modal generative framework engineered for local execution on consumer hardware, utilizing PyTorch's Metal Performance Shaders (MPS) for Apple Silicon acceleration.
-                  </p>
-                  <div className="action-links">
-                    <a href={NEXUS_GITHUB_URL} className="action-link" target="_blank" rel="noopener noreferrer">View Repository</a>
-                  </div>
-                </div>
-                <button className="close-btn" onClick={(e) => { e.stopPropagation(); setActiveProject(null); }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-              </div>
-              <div className="active-content">
-                <span className="section-label">Nexus Chained Inference</span>
-                <div className="pipeline">
-                  {['Text Prompt', 'CLIP', 'Stable Diffusion v1.5', 'Latent Cache', 'Stable Video Diffusion', 'MP4 Output'].map((step, i, arr) => (
-                    <React.Fragment key={i}>
-                      <div className="pipeline-node">{step}</div>
-                      {i < arr.length - 1 && <div className="pipeline-arrow">→</div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-
-                <span className="section-label">Lex3D Shape Generation</span>
-                <div className="pipeline">
-                  {['Semantic Prompt', 'CLIP Embed', 'OpenAI Shap-E', 'Implicit NeRF Field', 'Trimesh Export', 'STL Output'].map((step, i, arr) => (
-                    <React.Fragment key={i}>
-                      <div className="pipeline-node">{step}</div>
-                      {i < arr.length - 1 && <div className="pipeline-arrow">→</div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-
-                <span className="section-label">Hardware Operations</span>
-                <table className="tech-table">
-                  <tbody>
-                    <tr>
-                      <td className="key">Apple MPS Backend</td>
-                      <td className="value">Custom PyTorch configuration casting all tensors to the `mps` device, enabling hardware-accelerated matrix multiplication directly on Apple Silicon GPUs.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">Memory Management</td>
-                      <td className="value">Automated VRAM clearing via `gc.collect()` and `torch.mps.empty_cache()` executed between model modality shifts to prevent persistent memory leaks and OOM faults.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">Attention Slicing</td>
-                      <td className="value">Implements `pipe.enable_attention_slicing()` to chunk high-memory attention computation into sequential sub-ops, enabling large model execution on constrained VRAM.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">CPU Offloading</td>
-                      <td className="value">Utilizes `enable_sequential_cpu_offload()` to dynamically shift inactive neural network weights back to system RAM during iterative inference steps.</td>
-                    </tr>
-                    <tr>
-                      <td className="key">Zero-API Architecture</td>
-                      <td className="value">Designed to run 100% offline without reliance on external cloud inference APIs, ensuring absolute data privacy and eliminating recurring costs.</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
-        </div>
+          </Reveal>
+        </section>
 
       </div>
+
+      <footer>
+        <Reveal>
+          © {new Date().getFullYear()} Aryan Rajesh. U.S Citizen.
+        </Reveal>
+      </footer>
     </div>
   );
 }
