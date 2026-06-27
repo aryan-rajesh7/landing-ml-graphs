@@ -64,6 +64,8 @@ export default function ProfessionalPortfolio() {
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        html { scroll-behavior: smooth; }
+
         body {
           background-color: var(--bg-primary);
           color: var(--text-primary);
@@ -116,6 +118,51 @@ export default function ProfessionalPortfolio() {
         }
         @keyframes revealText {
           to { opacity: 1; }
+        }
+
+        /* --- NAVBAR --- */
+        .navbar {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 70px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0 40px;
+          background: rgba(250, 250, 250, 0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(229, 231, 235, 0.5);
+          z-index: 1000;
+          transition: all 0.3s;
+        }
+        .nav-brand {
+          font-family: 'Playfair Display', serif;
+          font-weight: 700;
+          font-size: 20px;
+          color: var(--text-primary);
+          text-decoration: none;
+          letter-spacing: -0.05em;
+        }
+        .nav-links {
+          display: flex;
+          gap: 32px;
+        }
+        .nav-link {
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--text-secondary);
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .nav-link:hover {
+          color: var(--accent);
+        }
+        @media (max-width: 768px) {
+          .nav-links { display: none; }
+          .navbar { padding: 0 24px; }
         }
 
         /* --- LAYOUT & REVEAL --- */
@@ -441,6 +488,17 @@ export default function ProfessionalPortfolio() {
         </div>
       </div>
 
+      {/* NAVBAR */}
+      <nav className="navbar">
+        <a href="#" className="nav-brand">Aryan Rajesh</a>
+        <div className="nav-links">
+          <a href="#experience" className="nav-link">Experience</a>
+          <a href="#projects" className="nav-link">Projects</a>
+          <a href="#skills" className="nav-link">Skills</a>
+          <a href="#education" className="nav-link">Education</a>
+        </div>
+      </nav>
+
       <div className="main-content">
         
         {/* HERO */}
@@ -461,7 +519,7 @@ export default function ProfessionalPortfolio() {
         </section>
 
         {/* EXPERIENCE */}
-        <section className="section">
+        <section id="experience" className="section">
           <Reveal>
             <div className="section-header">Experience</div>
           </Reveal>
@@ -534,7 +592,7 @@ export default function ProfessionalPortfolio() {
         </section>
 
         {/* PROJECTS */}
-        <section className="section">
+        <section id="projects" className="section">
           <Reveal>
             <div className="section-header">Projects</div>
           </Reveal>
@@ -582,7 +640,7 @@ export default function ProfessionalPortfolio() {
         </section>
 
         {/* TECHNICAL SKILLS */}
-        <section className="section">
+        <section id="skills" className="section">
           <Reveal>
             <div className="section-header">Technical Skills</div>
           </Reveal>
@@ -596,7 +654,7 @@ export default function ProfessionalPortfolio() {
         </section>
 
         {/* EDUCATION */}
-        <section className="section" style={{ paddingBottom: '80px' }}>
+        <section id="education" className="section" style={{ paddingBottom: '80px' }}>
           <Reveal>
             <div className="section-header">Education</div>
           </Reveal>
