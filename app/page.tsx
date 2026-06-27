@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 
 const TRAFFIC_DEMO_URL = "https://ai-traffic-optimizer.vercel.app/";
 const TRAFFIC_GITHUB_URL = "https://github.com/aryan-rajesh7/ai-traffic-optimizer";
@@ -8,618 +8,647 @@ const HF_URL = "https://huggingface.co/spaces/aryan-rajesh7/ai-traffic-optimizer
 const NEXUS_GITHUB_URL = "https://github.com/aryan-rajesh7/nexus-lex3d";
 const ML_REPO_URL = "https://github.com/aryan-rajesh7/landing-ml-graphs";
 
-const colors = {
-  blue: "#2563eb",
-  green: "#059669",
-  orange: "#ea580c",
-  purple: "#7c3aed",
-  pink: "#db2777",
-  teal: "#0d9488",
-  rose: "#e11d48",
-  bg: "#ffffff",
-  cardBg: "rgba(255, 255, 255, 0.6)",
-  border: "rgba(0, 0, 0, 0.06)",
-  textMain: "#0f172a",
-  textSec: "#475569",
+function useReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+        }
+      },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    if (ref.current) observer.observe(ref.current);
+    return () => observer.disconnect();
+  }, []);
+  return ref;
+}
+
+const Reveal = ({ children, delay = 0, className = "" }: { children: React.ReactNode, delay?: number, className?: string }) => {
+  const ref = useReveal();
+  return (
+    <div ref={ref} className={`reveal-wrapper ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  );
 };
 
-type TabId = "traffic" | "nexus" | "p1" | "p2" | "p3" | "p4";
-
-export default function BeautifulLightPortfolio() {
-  const [activeTab, setActiveTab] = useState<TabId>("traffic");
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setIsVisible(true);
-  }, []);
-
-  const portfolioTabs: { id: TabId; label: string; color: string }[] = [
-    { id: "traffic", label: "AI Traffic Optimizer", color: colors.blue },
-    { id: "nexus", label: "Nexus + Lex3D", color: colors.green },
-    { id: "p1", label: "Project Alpha", color: colors.purple },
-    { id: "p2", label: "Project Beta", color: colors.pink },
-    { id: "p3", label: "Project Gamma", color: colors.teal },
-    { id: "p4", label: "Project Delta", color: colors.rose },
-  ];
-
-  const activeColor = portfolioTabs.find(t => t.id === activeTab)?.color || colors.blue;
-
-  const FlowNode = ({ label, type, isLast = false }: { label: string; type: 'input' | 'process' | 'ai' | 'output'; isLast?: boolean }) => {
-    const getTypeStyling = () => {
-      switch (type) {
-        case 'input': return { bg: '#EFF6FF', border: colors.blue, color: colors.blue };
-        case 'ai': return { bg: '#F5F3FF', border: colors.purple, color: colors.purple };
-        case 'process': return { bg: '#F8FAFC', border: '#94A3B8', color: '#475569' };
-        case 'output': return { bg: '#FFF7ED', border: colors.orange, color: colors.orange };
-      }
-    };
-    const style = getTypeStyling();
-    return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <div className="flow-node" style={{
-          background: style.bg,
-          border: `1px solid ${style.border}`,
-          color: style.color,
-        }}>
-          {label}
-        </div>
-        {!isLast && (
-          <div style={{ width: '24px', height: '2px', background: colors.border, position: 'relative' }}>
-            <div style={{
-              position: 'absolute', right: '-2px', top: '-4px',
-              width: '0', height: '0',
-              borderTop: '5px solid transparent',
-              borderBottom: '5px solid transparent',
-              borderLeft: `6px solid ${colors.border}`
-            }} />
-          </div>
-        )}
-      </div>
-    );
-  };
-
+export default function PremiumPortfolio() {
   return (
-    <>
+    <div className="portfolio-container">
       <style dangerouslySetInnerHTML={{ __html: `
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
+
         :root {
-          --active-color: ${activeColor};
+          --blue: #2563eb;
+          --green: #059669;
         }
+
         body {
-          background-color: #fafafa;
-          color: ${colors.textMain};
+          background-color: #f8fafc;
+          color: #0f172a;
+          font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+          overflow-x: hidden;
+          margin: 0;
         }
-        ::selection {
-          background: var(--active-color);
-          color: white;
-        }
-        .reveal {
+
+        .reveal-wrapper {
           opacity: 0;
-          transform: translateY(20px);
-          animation: revealAnim 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+          transform: translateY(40px) scale(0.98);
+          transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @keyframes revealAnim {
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .delay-1 { animation-delay: 0.1s; }
-        .delay-2 { animation-delay: 0.2s; }
-        .delay-3 { animation-delay: 0.3s; }
-
-        .bento-card {
-          background: ${colors.cardBg};
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          border: 1px solid ${colors.border};
-          border-radius: 20px;
-          padding: 40px;
-          transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-          box-shadow: 0 4px 24px -8px rgba(0,0,0,0.03), inset 0 0 0 1px rgba(255,255,255,0.4);
-        }
-        
-        .bento-card:hover {
-          transform: translateY(-4px) scale(1.005);
-          box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.08), inset 0 0 0 1px rgba(255,255,255,0.8);
-          border-color: rgba(0,0,0,0.1);
+        .reveal-wrapper.revealed {
+          opacity: 1;
+          transform: translateY(0) scale(1);
         }
 
-        .btn {
-          padding: 12px 24px;
-          border-radius: 10px;
+        .ambient-background {
+          position: fixed;
+          inset: 0;
+          z-index: -2;
+          overflow: hidden;
+          background: #f8fafc;
+        }
+
+        .blob {
+          position: absolute;
+          border-radius: 50%;
+          filter: blur(120px);
+          opacity: 0.6;
+          animation: float 20s ease-in-out infinite alternate;
+        }
+        .blob-1 {
+          top: -10%; left: -10%; width: 50vw; height: 50vw;
+          background: rgba(37, 99, 235, 0.2);
+        }
+        .blob-2 {
+          bottom: -10%; right: -10%; width: 60vw; height: 60vw;
+          background: rgba(5, 150, 105, 0.15);
+          animation-delay: -5s;
+        }
+        .blob-3 {
+          top: 40%; left: 40%; width: 40vw; height: 40vw;
+          background: rgba(124, 58, 237, 0.15);
+          animation-delay: -10s;
+        }
+
+        @keyframes float {
+          0% { transform: translate(0, 0) scale(1); }
+          50% { transform: translate(5%, 10%) scale(1.1); }
+          100% { transform: translate(-5%, -5%) scale(0.9); }
+        }
+
+        .grid-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: -1;
+          background-image: 
+            linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), 
+            linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+          background-size: 60px 60px;
+          mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        }
+
+        .content-wrapper {
+          position: relative;
+          z-index: 1;
+          max-width: 1400px;
+          margin: 0 auto;
+          padding: 0 24px;
+        }
+
+        .hero {
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+        }
+
+        .hero-badge {
+          background: rgba(255,255,255,0.8);
+          border: 1px solid rgba(0,0,0,0.1);
+          padding: 10px 20px;
+          border-radius: 100px;
           font-size: 14px;
           font-weight: 600;
-          text-decoration: none;
+          color: #475569;
+          margin-bottom: 32px;
+          backdrop-filter: blur(10px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.04);
           display: inline-flex;
           align-items: center;
-          transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
-          border: 1px solid transparent;
-          cursor: pointer;
+          gap: 10px;
         }
-        
-        .btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary { background: var(--active-color); color: white; }
-        .btn-primary:hover { filter: brightness(1.1); }
-        
-        .btn-secondary { background: white; color: ${colors.textMain}; border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05); }
-        .btn-secondary:hover { border-color: rgba(0,0,0,0.2); background: #f8fafc; }
-
-        .section-header {
-          font-size: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.15em;
-          color: var(--active-color);
-          margin-bottom: 24px;
-          font-weight: 700;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-        }
-        .section-header::after {
+        .hero-badge::before {
           content: '';
-          height: 1px;
-          flex-grow: 1;
-          background: linear-gradient(90deg, var(--active-color) 0%, transparent 100%);
-          opacity: 0.2;
-        }
-        
-        .stack-list-item {
-          padding: 20px 0;
-          border-bottom: 1px solid ${colors.border};
-          transition: transform 0.3s ease;
-        }
-        .stack-list-item:last-child { border-bottom: none; }
-        .stack-list-item:hover { transform: translateX(4px); }
-
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 32px; }
-        .grid-plots { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-
-        .plot-img {
-          width: 100%;
-          height: auto;
-          border-radius: 12px;
-          border: 1px solid rgba(0,0,0,0.05);
-          box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.05);
-          transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-        .plot-img:hover {
-          transform: scale(1.03) translateY(-4px);
-          box-shadow: 0 20px 30px -10px rgba(0, 0, 0, 0.1);
+          width: 8px;
+          height: 8px;
+          background: #10b981;
+          border-radius: 50%;
+          box-shadow: 0 0 12px #10b981;
         }
 
-        .flow-node {
-          padding: 12px 20px;
-          border-radius: 10px;
-          font-size: 12px;
-          font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 0.05em;
-          font-family: 'SF Mono', ui-monospace, monospace;
-          white-space: nowrap;
-          box-shadow: 0 2px 8px -2px rgba(0,0,0,0.05);
-        }
-
-        .tab-button {
-          position: relative;
-          padding: 12px 24px;
-          border-radius: 12px;
-          font-size: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          border: none;
-          background: transparent;
-          color: ${colors.textSec};
-          z-index: 1;
-        }
-        .tab-button:hover {
-          color: ${colors.textMain};
-        }
-        .tab-button.active {
-          color: white;
-        }
-        
         .hero-title {
-          font-size: clamp(60px, 10vw, 120px);
+          font-size: clamp(4rem, 14vw, 10rem);
           font-weight: 900;
+          line-height: 0.85;
           letter-spacing: -0.05em;
-          line-height: 0.9;
+          color: #0f172a;
           margin: 0;
           background: linear-gradient(135deg, #0f172a 0%, #334155 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          text-shadow: 0px 4px 20px rgba(0,0,0,0.05);
         }
 
         .hero-subtitle {
-          font-size: clamp(24px, 4vw, 40px);
-          font-weight: 300;
+          font-size: clamp(1.5rem, 4vw, 3rem);
+          font-weight: 400;
+          color: #475569;
+          margin-top: 32px;
           letter-spacing: -0.02em;
-          color: ${colors.textSec};
-          margin-top: 16px;
+        }
+        .hero-subtitle span {
+          font-weight: 600;
+          color: #2563eb;
         }
 
-        .nav-container {
-          position: sticky;
-          top: 24px;
-          z-index: 100;
-          display: flex;
-          justify-content: center;
-          margin-bottom: 64px;
-          pointer-events: none;
+        .hero-desc {
+          font-size: clamp(1.1rem, 2vw, 1.4rem);
+          color: #64748b;
+          max-width: 600px;
+          margin: 32px auto 0;
+          line-height: 1.6;
         }
-        
-        .nav-bar {
+
+        .scroll-indicator {
+          margin-top: 64px;
+          animation: bounce 2s infinite;
+          opacity: 0.5;
+        }
+
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-10px); }
+          60% { transform: translateY(-5px); }
+        }
+
+        .project-section {
+          padding: 80px 0 160px;
+          position: relative;
+        }
+
+        .project-card {
+          background: rgba(255, 255, 255, 0.7);
+          backdrop-filter: blur(40px);
+          -webkit-backdrop-filter: blur(40px);
+          border: 1px solid rgba(255,255,255,0.8);
+          border-radius: 48px;
+          padding: clamp(32px, 6vw, 80px);
+          box-shadow: 
+            0 40px 100px -20px rgba(0,0,0,0.08),
+            inset 0 0 0 1px rgba(255,255,255,0.8);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .project-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0; height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,1), transparent);
+        }
+
+        .project-tag {
+          font-size: 14px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          padding: 10px 20px;
+          border-radius: 100px;
           display: inline-flex;
-          background: rgba(255,255,255,0.8);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          padding: 8px;
-          border-radius: 20px;
-          border: 1px solid rgba(0,0,0,0.05);
-          box-shadow: 0 20px 40px -8px rgba(0,0,0,0.08);
-          pointer-events: auto;
-          overflow-x: auto;
-          max-width: 100%;
-          scrollbar-width: none;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 32px;
         }
-        .nav-bar::-webkit-scrollbar { display: none; }
+        .tag-traffic { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+        .tag-nexus { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
 
-        .placeholder-card {
+        .project-title {
+          font-size: clamp(3rem, 7vw, 5.5rem);
+          font-weight: 900;
+          letter-spacing: -0.04em;
+          margin-bottom: 32px;
+          line-height: 0.95;
+        }
+        .title-traffic { color: #1e3a8a; }
+        .title-nexus { color: #064e3b; }
+
+        .project-desc {
+          font-size: clamp(1.1rem, 2vw, 1.35rem);
+          color: #475569;
+          line-height: 1.7;
+          max-width: 900px;
+          margin-bottom: 48px;
+        }
+
+        .action-row {
           display: flex;
-          flex-direction: column;
+          gap: 16px;
+          flex-wrap: wrap;
+          margin-bottom: 80px;
+        }
+
+        .btn {
+          padding: 18px 36px;
+          border-radius: 100px;
+          font-size: 16px;
+          font-weight: 700;
+          text-decoration: none;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          display: inline-flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .btn-primary-traffic {
+          background: #2563eb;
+          color: white;
+          box-shadow: 0 10px 24px -8px rgba(37, 99, 235, 0.6);
+        }
+        .btn-primary-traffic:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 32px -8px rgba(37, 99, 235, 0.8);
+        }
+        .btn-primary-nexus {
+          background: #059669;
+          color: white;
+          box-shadow: 0 10px 24px -8px rgba(5, 150, 105, 0.6);
+        }
+        .btn-primary-nexus:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 16px 32px -8px rgba(5, 150, 105, 0.8);
+        }
+        .btn-outline {
+          background: rgba(255,255,255,0.7);
+          color: #0f172a;
+          border: 1px solid rgba(0,0,0,0.1);
+        }
+        .btn-outline:hover {
+          background: white;
+          transform: translateY(-4px);
+          box-shadow: 0 12px 24px -8px rgba(0,0,0,0.08);
+          border-color: rgba(0,0,0,0.15);
+        }
+
+        .bento-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 24px;
+          margin-bottom: 48px;
+        }
+
+        .bento-item {
+          background: rgba(255,255,255,0.5);
+          border: 1px solid rgba(0,0,0,0.06);
+          padding: 40px;
+          border-radius: 32px;
+          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .bento-item:hover {
+          background: rgba(255,255,255,0.95);
+          transform: translateY(-6px);
+          box-shadow: 0 24px 48px -12px rgba(0,0,0,0.08);
+          border-color: rgba(0,0,0,0.12);
+        }
+
+        .bento-icon {
+          width: 56px;
+          height: 56px;
+          border-radius: 16px;
+          display: flex;
           align-items: center;
           justify-content: center;
-          height: 400px;
-          border: 2px dashed ${colors.border};
+          margin-bottom: 32px;
+        }
+        .icon-blue { background: #eff6ff; color: #2563eb; }
+        .icon-green { background: #ecfdf5; color: #059669; }
+        .icon-purple { background: #f5f3ff; color: #7c3aed; }
+        .icon-orange { background: #fff7ed; color: #ea580c; }
+
+        .bento-title {
+          font-size: 1.5rem;
+          font-weight: 800;
+          margin-bottom: 16px;
+          color: #0f172a;
+          letter-spacing: -0.02em;
+        }
+
+        .bento-desc {
+          font-size: 1.05rem;
+          color: #475569;
+          line-height: 1.7;
+        }
+
+        .architecture-flow {
+          display: flex;
+          align-items: center;
+          overflow-x: auto;
+          padding: 32px 0;
+          gap: 16px;
+          scrollbar-width: none;
+          margin-bottom: 48px;
+        }
+        .architecture-flow::-webkit-scrollbar { display: none; }
+
+        .flow-node {
+          padding: 16px 28px;
+          background: white;
+          border: 1px solid rgba(0,0,0,0.1);
           border-radius: 20px;
-          background: rgba(255,255,255,0.3);
-          color: ${colors.textSec};
+          font-size: 14px;
+          font-weight: 700;
+          color: #0f172a;
+          white-space: nowrap;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .flow-arrow {
+          color: #94a3b8;
+          flex-shrink: 0;
+        }
+
+        .section-heading {
+          font-size: 2rem;
+          font-weight: 800;
+          color: #0f172a;
+          margin-bottom: 32px;
+          letter-spacing: -0.03em;
+        }
+
+        .plot-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 32px;
+          margin-top: 40px;
+        }
+
+        .plot-img-container {
+          background: white;
+          padding: 24px;
+          border-radius: 32px;
+          border: 1px solid rgba(0,0,0,0.05);
+          box-shadow: 0 20px 40px -10px rgba(0,0,0,0.05);
+          transition: transform 0.4s ease;
+        }
+        .plot-img-container:hover {
+          transform: translateY(-8px);
+        }
+        .plot-img {
+          width: 100%;
+          border-radius: 12px;
+          display: block;
+        }
+        .plot-caption {
+          font-size: 14px;
+          font-weight: 700;
+          color: #64748b;
           text-align: center;
-          padding: 40px;
-          transition: all 0.3s ease;
+          margin-top: 20px;
         }
-        .placeholder-card:hover {
-          border-color: rgba(0,0,0,0.15);
-          background: rgba(255,255,255,0.6);
-        }
-        
-        .glow-bg {
-          position: fixed;
-          width: 80vw;
-          height: 80vw;
-          border-radius: 50%;
-          filter: blur(100px);
-          z-index: -1;
-          opacity: 0.15;
-          pointer-events: none;
-          transition: background 1s ease;
+
+        footer {
+          text-align: center;
+          padding: 80px 24px;
+          color: #64748b;
+          font-size: 15px;
+          font-weight: 500;
+          border-top: 1px solid rgba(0,0,0,0.05);
         }
       `}} />
 
-      <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh", position: 'relative', overflow: 'hidden' }}>
-        
-        {/* Dynamic Glow Background */}
-        <div className="glow-bg" style={{
-          top: '-20%', left: '-10%',
-          background: `radial-gradient(circle, ${activeColor} 0%, transparent 70%)`,
-        }} />
-        <div className="glow-bg" style={{
-          bottom: '-20%', right: '-10%',
-          background: `radial-gradient(circle, ${colors.orange} 0%, transparent 70%)`,
-          opacity: 0.08
-        }} />
-
-        {/* Ambient Grid */}
-        <div style={{
-          position: 'fixed', inset: 0,
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px)`,
-          backgroundSize: '40px 40px',
-          zIndex: -2,
-          maskImage: 'radial-gradient(circle at center, black, transparent 80%)',
-          WebkitMaskImage: 'radial-gradient(circle at center, black, transparent 80%)',
-        }} />
-
-        <div style={{ display: "flex", flexDirection: "column", flexGrow: 1, maxWidth: "1400px", margin: "0 auto", padding: "0 24px", position: "relative", zIndex: 1, width: "100%" }}>
-          
-          {/* Huge Hero Section */}
-          <section className={`reveal ${isVisible ? '' : 'hidden'}`} style={{ paddingTop: "12vh", paddingBottom: "10vh" }}>
-            <h1 className="hero-title">ARYAN<br/>RAJESH</h1>
-            <h2 className="hero-subtitle">
-              Software & <span style={{ color: activeColor, fontWeight: 500, transition: 'color 0.5s ease' }}>AI Engineering</span>
-            </h2>
-            <p style={{ fontSize: "20px", color: colors.textSec, maxWidth: "600px", lineHeight: "1.6", marginTop: "32px" }}>
-              Building and deploying full-stack AI solutions that integrate data, models, and applications.
-            </p>
-          </section>
-
-          {/* Sticky Navigation */}
-          <div className="nav-container reveal delay-1">
-            <div className="nav-bar">
-              {portfolioTabs.map(tab => (
-                <button
-                  key={tab.id}
-                  className={`tab-button ${activeTab === tab.id ? 'active' : ''}`}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    color: activeTab === tab.id ? '#fff' : '',
-                  }}
-                >
-                  {activeTab === tab.id && (
-                    <div style={{
-                      position: 'absolute', inset: 0, borderRadius: '12px',
-                      background: tab.color, zIndex: -1,
-                      boxShadow: `0 4px 12px ${tab.color}40`
-                    }} />
-                  )}
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="reveal delay-2" style={{ minHeight: "60vh" }}>
-            {/* TRAFFIC OPTIMIZER TAB */}
-            {activeTab === "traffic" && (
-              <div style={{ animation: "revealAnim 0.6s ease forwards" }}>
-                <div className="bento-card" style={{ marginBottom: "32px" }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    <div style={{ maxWidth: "900px" }}>
-                      <h2 style={{ fontSize: "40px", fontWeight: "800", margin: "0 0 16px 0", letterSpacing: "-0.03em", color: colors.blue }}>
-                        AI Traffic Optimizer
-                      </h2>
-                      <p style={{ color: colors.textSec, fontSize: "18px", lineHeight: "1.7", margin: "0 0 16px 0" }}>
-                        The AI Traffic Optimizer is a full-stack predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
-                      </p>
-                      <p style={{ color: colors.textSec, fontSize: "18px", lineHeight: "1.7", margin: "0" }}>
-                        The architecture establishes persistent WebSocket connections to the TomTom API to ingest live speed, flow, and incident data for any custom global address. This data is visualized via MapLibre GL JS and processed through a hybrid PyTorch LSTM and XGBoost pipeline to forecast congestion volatility, while Google's Gemma 3 operates as a Reasoning Engine to generate human-readable mitigation strategies.
-                      </p>
-                    </div>
-                    <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "16px" }}>
-                      <a href={TRAFFIC_DEMO_URL} className="btn btn-primary" target="_blank" rel="noopener noreferrer">Live App</a>
-                      <a href={TRAFFIC_GITHUB_URL} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">GitHub</a>
-                      <a href={HF_URL} className="btn btn-secondary" target="_blank" rel="noopener noreferrer">Hugging Face Backend</a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bento-card" style={{ marginBottom: "32px", overflowX: 'auto' }}>
-                  <div className="section-header">Live Application Architecture</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0', padding: '16px 0', minWidth: '900px' }}>
-                    <FlowNode label="User Input (Next.js)" type="input" />
-                    <FlowNode label="Nominatim Geocoding" type="process" />
-                    <FlowNode label="TomTom Traffic API" type="input" />
-                    <FlowNode label="FastAPI (Python)" type="process" />
-                    <FlowNode label="Gemma 3.0 RAG" type="ai" />
-                    <FlowNode label="WebSocket Stream" type="process" />
-                    <FlowNode label="MapLibre GL Client" type="output" isLast={true} />
-                  </div>
-                </div>
-
-                <div className="bento-card" style={{ marginBottom: "32px" }}>
-                  <div className="section-header">Deep Dive: System Architecture & Data Pipeline</div>
-                  <div className="grid-2">
-                    {[
-                      { aspect: "1. Global Address Resolution (Nominatim)", desc: "Asynchronous forward-geocoding translates user-provided natural language addresses into precise floating-point coordinates required for spatial indexing." },
-                      { aspect: "2. Dynamic Telemetry Ingestion (TomTom)", desc: "FastAPI backend queries the TomTom Traffic Flow API for highly granular JSON payloads containing current street speeds, free-flow speeds, and closures." },
-                      { aspect: "3. Persistent WebSocket Orchestration", desc: "Bypasses HTTP overhead. An asyncio task polls endpoints every 30s, pushing localized JSON dataframes over active sockets to maintain real-time parity." },
-                      { aspect: "4. Reasoning Engine (Gemma 3.0 RAG)", desc: "Google's Gemma 3.0 executes RAG. Live numerical data is injected into a structured prompt, forcing grounded output and specific signal timing mods." },
-                      { aspect: "5. Geospatial Vector Rendering (MapLibre)", desc: "React client implements MapLibre GL JS to handle heavy geospatial rendering natively in the browser, dynamically plotting target coordinates." },
-                      { aspect: "6. Stream State Management (React Hooks)", desc: "Isolates stream management using useRef and useEffect hooks to process 30s WebSocket payloads without dropping frames or triggering full re-renders." },
-                      { aspect: "7. Asynchronous API Gateway (FastAPI)", desc: "Python's FastAPI serves as the routing layer. The asynchronous event loop prevents I/O blocking when managing API requests and socket clients." },
-                      { aspect: "8. Security (CORS)", desc: "Restrictive CORS middleware protects API keys and backend from malicious websites, isolating access to Vercel and Hugging Face domains." }
-                    ].map(item => (
-                      <div key={item.aspect} className="stack-list-item">
-                        <div style={{ fontSize: "16px", fontWeight: "700", color: colors.textMain, marginBottom: "8px" }}>{item.aspect}</div>
-                        <div style={{ fontSize: "15px", color: colors.textSec, lineHeight: "1.6" }}>{item.desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bento-card" style={{ marginBottom: "32px", background: "linear-gradient(to bottom right, #ffffff, #f8fafc)" }}>
-                  <div className="section-header">Machine Learning Training Architecture</div>
-                  <p style={{ color: colors.textSec, fontSize: "16px", lineHeight: "1.7", marginBottom: "40px", maxWidth: "900px" }}>
-                    Distinct from the live web application's routing logic, the core predictive capabilities were designed, evaluated, and compiled in an isolated Python pipeline before endpoint deployment. This dual-model architecture processes both sequential time-series events and static tabular features.
-                  </p>
-                  
-                  <div className="grid-2">
-                    {[
-                      { aspect: "Time-Series Forecasting (PyTorch LSTM)", desc: "An LSTM network identifies temporal congestion buildup. By passing a rolling window of historical flow metrics, it predicts impending traffic volume spikes." },
-                      { aspect: "Feature Importance Regressor (XGBoost)", desc: "Gradient-boosted decision trees analyze static and engineered features, establishing a highly interpretable baseline probability for congestion severity." },
-                      { aspect: "Synthetic Data Engineering (Pandas/NumPy)", desc: "A data generation script simulates 1,000+ localized readings, injecting standard deviation noise and rush-hour cycles to ensure correct model generalization." },
-                      { aspect: "Data Normalization & Processing (Scikit-Learn)", desc: "Scikit-Learn's MinMaxScaler normalizes all traffic inputs to prevent gradient explosion. Strict temporal train/test splitting avoids data leakage." }
-                    ].map(item => (
-                      <div key={item.aspect} className="stack-list-item">
-                        <div style={{ fontSize: "16px", fontWeight: "700", color: colors.textMain, marginBottom: "8px" }}>{item.aspect}</div>
-                        <div style={{ fontSize: "15px", color: colors.textSec, lineHeight: "1.6" }}>{item.desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="bento-card" style={{ marginBottom: "64px" }}>
-                  <div className="section-header">Pipeline Analytics & Visualizations</div>
-                  
-                  <div style={{ display: "inline-flex", alignItems: "center", padding: "8px 16px", background: "#EFF6FF", border: "1px solid #BFDBFE", borderRadius: "8px", color: "#1D4ED8", fontSize: "13px", fontWeight: "600", marginBottom: "32px" }}>
-                    <svg style={{ width: '16px', height: '16px', marginRight: '8px' }} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    Models trained and evaluated on high-fidelity synthetic data generation scripts.
-                  </div>
-                  
-                  <div className="grid-plots" style={{ marginBottom: "40px" }}>
-                    <div>
-                      <img src="/ml/plots/prediction_vs_actual.png" alt="LSTM Prediction vs Actual" className="plot-img" />
-                      <p style={{ fontSize: "14px", fontWeight: "600", color: colors.textMain, marginTop: "16px", textAlign: "center" }}>LSTM: Prediction vs Actual Tracking</p>
-                    </div>
-                    <div>
-                      <img src="/ml/plots/xgboost_feature_importance.png" alt="XGBoost Feature Importance" className="plot-img" />
-                      <p style={{ fontSize: "14px", fontWeight: "600", color: colors.textMain, marginTop: "16px", textAlign: "center" }}>XGBoost: Decision Tree Feature Weights</p>
-                    </div>
-                    <div>
-                      <img src="/ml/plots/congestion_over_time.png" alt="Congestion Over Time" className="plot-img" />
-                      <p style={{ fontSize: "14px", fontWeight: "600", color: colors.textMain, marginTop: "16px", textAlign: "center" }}>Simulated Temporal Congestion Distribution</p>
-                    </div>
-                  </div>
-
-                  <div style={{ borderTop: `1px solid ${colors.border}`, paddingTop: "32px" }}>
-                    <h3 style={{ fontSize: "20px", fontWeight: "700", color: colors.textMain, marginBottom: "24px" }}>Understanding the Visualizations</h3>
-                    
-                    <div className="grid-2">
-                      <div>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: colors.textMain, marginBottom: "8px" }}>1. LSTM Tracking</div>
-                        <p style={{ color: colors.textSec, fontSize: "15px", lineHeight: "1.7" }}>
-                          Compares the neural network's forecasted congestion scores against ground-truth data. Tight alignment indicates the LSTM model successfully learned temporal patterns.
-                        </p>
-                      </div>
-                      <div>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: colors.textMain, marginBottom: "8px" }}>2. XGBoost Feature Weights</div>
-                        <p style={{ color: colors.textSec, fontSize: "15px", lineHeight: "1.7" }}>
-                          Shows which data the decision tree relied on most. <strong>lag_1</strong> and <strong>lag_2</strong> are crucial, representing traffic scores 2 and 4 minutes prior.
-                        </p>
-                      </div>
-                      <div style={{ gridColumn: "1 / -1" }}>
-                        <div style={{ fontSize: "15px", fontWeight: "700", color: colors.textMain, marginBottom: "8px" }}>3. Temporal Distribution</div>
-                        <p style={{ color: colors.textSec, fontSize: "15px", lineHeight: "1.7" }}>
-                          Plots the raw synthetic dataset over a simulated 24-hour period, verifying the integrity of the data engineering script and rush-hour peak generation.
-                        </p>
-                      </div>
-                    </div>
-
-                    <div style={{ display: "flex", justifyContent: "center", paddingTop: "32px", marginTop: "24px", borderTop: `1px dashed ${colors.border}` }}>
-                      <a href={ML_REPO_URL} className="btn btn-secondary" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" /></svg>
-                        View Landing Page & ML Source Code
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* NEXUS + LEX3D TAB */}
-            {activeTab === "nexus" && (
-              <div style={{ animation: "revealAnim 0.6s ease forwards" }}>
-                <div className="bento-card" style={{ marginBottom: "32px" }}>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                    <div style={{ maxWidth: "850px" }}>
-                      <div style={{ display: "flex", alignItems: "center", gap: "16px", marginBottom: "16px" }}>
-                        <h2 style={{ fontSize: "40px", fontWeight: "800", margin: "0", letterSpacing: "-0.03em", color: colors.green }}>
-                          Nexus + Lex3D Suite
-                        </h2>
-                        <span style={{ fontSize: "12px", fontWeight: "800", padding: "6px 12px", background: "#ECFDF5", border: `1px solid ${colors.green}`, borderRadius: "8px", color: colors.green, textTransform: 'uppercase', letterSpacing: '0.05em' }}>LOCAL COMPUTE</span>
-                      </div>
-                      <p style={{ color: colors.textSec, fontSize: "18px", lineHeight: "1.7", margin: "0" }}>
-                        An offline, cross-modal generative framework engineered for local execution on consumer hardware. It utilizes PyTorch's Metal Performance Shaders (MPS) backend for Apple Silicon acceleration. Nexus chains multiple diffusion models for multimedia generation, while Lex3D synthesizes printable 3D topologies directly from semantic prompts via Neural Radiance Fields.
-                      </p>
-                    </div>
-                    <div style={{ display: "flex", gap: "16px", flexWrap: "wrap", marginTop: "8px" }}>
-                      <a href={NEXUS_GITHUB_URL} className="btn btn-primary" target="_blank" rel="noopener noreferrer">View Repository</a>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bento-card" style={{ marginBottom: "32px", overflowX: 'auto' }}>
-                  <div className="section-header" style={{ marginBottom: '32px' }}>Inference Pipelines</div>
-                  
-                  <div style={{ marginBottom: '40px' }}>
-                    <div style={{fontSize: '15px', fontWeight: '700', color: colors.textMain, marginBottom: '16px'}}>A. Nexus Multimedia Pipeline (Chained Inference)</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0', padding: '10px 0', minWidth: '800px' }}>
-                      <FlowNode label="Text Prompt" type="input" />
-                      <FlowNode label="CLIP Encoder" type="process" />
-                      <FlowNode label="Stable Diffusion v1.5" type="ai" />
-                      <FlowNode label="Generated image latent" type="process" />
-                      <FlowNode label="Stable Video Diffusion" type="ai" />
-                      <FlowNode label="MP4 Output" type="output" isLast={true} />
-                    </div>
-                  </div>
-                  <div>
-                    <div style={{fontSize: '15px', fontWeight: '700', color: colors.textMain, marginBottom: '16px'}}>B. Lex3D 3D Shape Generation (NeRF)</div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0', padding: '10px 0', minWidth: '800px' }}>
-                      <FlowNode label="Descriptive Text Prompt" type="input" />
-                      <FlowNode label="CLIP Text Embed" type="process" />
-                      <FlowNode label="OpenAI Shap-E Diffusion" type="ai" />
-                      <FlowNode label="Implicit NeRF Field" type="process" />
-                      <FlowNode label="Trimesh Mesh Export" type="process" />
-                      <FlowNode label="STL File Output" type="output" isLast={true} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid-2" style={{ marginBottom: "64px" }}>
-                  <div className="bento-card">
-                    <div className="section-header">Engineering Specs</div>
-                    {[
-                      { aspect: "Apple MPS Backend", desc: "Custom PyTorch configuration casting all tensors to the `mps` device, enabling hardware-accelerated matrix multiplication directly on Apple Silicon GPUs." },
-                      { aspect: "Memory Management", desc: "Automated VRAM clearing via `gc.collect()` and `torch.mps.empty_cache()` executed between model modality shifts to prevent persistent memory leaks and OOM faults." },
-                      { aspect: "Attention Slicing", desc: "Implements `pipe.enable_attention_slicing()` to chunk high-memory attention computation into sequential sub-ops, enabling large model execution on constrained VRAM." },
-                      { aspect: "CPU Offloading", desc: "Utilizes `enable_sequential_cpu_offload()` to dynamically shift inactive neural network weights back to system RAM during iterative inference steps." },
-                      { aspect: "Zero-API Architecture", desc: "Designed to run 100% offline without reliance on external cloud inference APIs, ensuring absolute data privacy and eliminating recurring costs." }
-                    ].map(item => (
-                      <div key={item.aspect} className="stack-list-item">
-                        <div style={{ fontSize: "16px", fontWeight: "700", color: colors.textMain, marginBottom: "6px" }}>{item.aspect}</div>
-                        <div style={{ fontSize: "15px", color: colors.textSec, lineHeight: "1.6" }}>{item.desc}</div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="bento-card">
-                    <div className="section-header">Generative Pipelines</div>
-                    {[
-                      { aspect: "Nexus: T2I (SD v1.5)", desc: "Stable Diffusion v1.5 pipeline utilizing CLIP text encoding and DPMSolver++ scheduler for accelerated inference, generating high-fidelity baseline 2D tensor arrays." },
-                      { aspect: "Nexus: Cross-Modal Conditioning", desc: "Feeds the SDv1.5 latent output array directly into Stable Video Diffusion (img2vid-xt) conditioning, maintaining temporal coherence across 7 generated video frames." },
-                      { aspect: "Nexus: Text to Audio", desc: "AudioLDM (s-full-v2) architecture synthesizing continuous 16kHz waveforms mapped to the semantic original prompt input." },
-                      { aspect: "Lex3D: NeRF Fields", desc: "Utilizes OpenAI Shap-E to generate Implicit Neural Radiance Fields via diffusion, processing text prompts into 3D latent space over 32 inference steps." },
-                      { aspect: "Lex3D: STL Geometry Export", desc: "Converts volumetric NeRF field data into continuous mesh boundary vertices/faces using Trimesh, exporting standardized STL topologies for CAD compatibility." }
-                    ].map(item => (
-                      <div key={item.aspect} className="stack-list-item">
-                        <div style={{ fontSize: "16px", fontWeight: "700", color: colors.textMain, marginBottom: "6px" }}>{item.aspect}</div>
-                        <div style={{ fontSize: "15px", color: colors.textSec, lineHeight: "1.6" }}>{item.desc}</div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* PLACEHOLDERS */}
-            {["p1", "p2", "p3", "p4"].includes(activeTab) && (
-              <div style={{ animation: "revealAnim 0.6s ease forwards" }}>
-                <div className="placeholder-card">
-                  <div style={{
-                    width: '64px', height: '64px', borderRadius: '50%',
-                    background: `linear-gradient(135deg, ${activeColor}40, transparent)`,
-                    border: `1px solid ${activeColor}60`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    marginBottom: '24px'
-                  }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={activeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                      <line x1="8" y1="21" x2="16" y2="21"></line>
-                      <line x1="12" y1="17" x2="12" y2="21"></line>
-                    </svg>
-                  </div>
-                  <h3 style={{ fontSize: "24px", fontWeight: "800", color: colors.textMain, marginBottom: "12px", letterSpacing: "-0.02em" }}>
-                    {portfolioTabs.find(t => t.id === activeTab)?.label}
-                  </h3>
-                  <p style={{ fontSize: "16px", color: colors.textSec, maxWidth: "400px", lineHeight: "1.6" }}>
-                    Details for this project are currently being documented. Check back soon for the complete architecture, source code, and live demo.
-                  </p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <footer style={{ padding: "40px 0", marginTop: 'auto', display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "20px", color: colors.textSec, fontSize: "14px", borderTop: "1px solid rgba(0,0,0,0.05)" }}>
-            <div style={{ fontWeight: '700', color: colors.textMain, display: "flex", alignItems: "center", gap: "8px" }}>
-              <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: activeColor, transition: "background 0.3s ease" }}></div>
-              Aryan Rajesh
-            </div>
-            <div>© {new Date().getFullYear()} — Source code licensed under respective repository terms.</div>
-          </footer>
-
-        </div>
+      <div className="ambient-background">
+        <div className="blob blob-1"></div>
+        <div className="blob blob-2"></div>
+        <div className="blob blob-3"></div>
       </div>
-    </>
+      
+      <div className="grid-overlay"></div>
+
+      <div className="content-wrapper">
+        <section className="hero">
+          <Reveal delay={100}>
+            <div className="hero-badge">Available for new opportunities</div>
+          </Reveal>
+          <Reveal delay={200}>
+            <h1 className="hero-title">Aryan Rajesh</h1>
+          </Reveal>
+          <Reveal delay={400}>
+            <h2 className="hero-subtitle">Software & <span>AI Engineering</span></h2>
+          </Reveal>
+          <Reveal delay={600}>
+            <p className="hero-desc">Building and deploying full-stack AI solutions that integrate data, models, and applications. Focused on creating scalable pipelines for cloud and local environments.</p>
+          </Reveal>
+          <Reveal delay={800}>
+            <div className="scroll-indicator">
+              <svg width="24" height="40" viewBox="0 0 24 40" fill="none" stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="36" rx="10"></rect>
+                <line x1="12" y1="10" x2="12" y2="16"></line>
+              </svg>
+            </div>
+          </Reveal>
+        </section>
+
+        {/* AI TRAFFIC OPTIMIZER */}
+        <section className="project-section">
+          <Reveal>
+            <div className="project-card">
+              <div className="project-tag tag-traffic">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                Cloud AI & Telemetry
+              </div>
+              
+              <h2 className="project-title title-traffic">AI Traffic Optimizer</h2>
+              
+              <p className="project-desc">
+                A full-stack predictive modeling platform designed to evaluate and optimize street-level vehicle flow. By integrating direct API telemetry with deep learning, it replaces static timing models with dynamically generated signal strategies based on live network conditions.
+              </p>
+
+              <div className="action-row">
+                <a href={TRAFFIC_DEMO_URL} className="btn btn-primary-traffic" target="_blank" rel="noopener noreferrer">
+                  View Live App
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                </a>
+                <a href={TRAFFIC_GITHUB_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href={HF_URL} className="btn btn-outline" target="_blank" rel="noopener noreferrer">Hugging Face Backend</a>
+              </div>
+
+              <h3 className="section-heading">Live Application Flow</h3>
+              <div className="architecture-flow">
+                {['User Input (Next.js)', 'Nominatim Geocoding', 'TomTom Traffic API', 'FastAPI (Python)', 'Gemma 3.0 RAG', 'WebSocket Stream', 'MapLibre GL Client'].map((step, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    <div className="flow-node">{step}</div>
+                    {idx < arr.length - 1 && (
+                      <div className="flow-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <h3 className="section-heading">System Architecture & Pipeline</h3>
+              <div className="bento-grid">
+                <div className="bento-item">
+                  <div className="bento-icon icon-blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                  </div>
+                  <div className="bento-title">Global Address Resolution</div>
+                  <div className="bento-desc">Asynchronous forward-geocoding via Nominatim API translates natural language addresses into precise floating-point coordinates for spatial indexing.</div>
+                </div>
+                
+                <div className="bento-item">
+                  <div className="bento-icon icon-orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  </div>
+                  <div className="bento-title">Dynamic Telemetry</div>
+                  <div className="bento-desc">Queries the TomTom Traffic Flow API for highly granular JSON payloads containing current street speeds, free-flow speeds, and closures.</div>
+                </div>
+
+                <div className="bento-item">
+                  <div className="bento-icon icon-purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                  </div>
+                  <div className="bento-title">Reasoning Engine (RAG)</div>
+                  <div className="bento-desc">Google's Gemma 3.0 executes RAG. Live numerical data is injected into a structured prompt, forcing grounded output and specific signal timing mods.</div>
+                </div>
+
+                <div className="bento-item">
+                  <div className="bento-icon icon-green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  </div>
+                  <div className="bento-title">FastAPI & WebSockets</div>
+                  <div className="bento-desc">Asynchronous API Gateway preventing I/O blocking. Polling endpoints every 30s and pushing localized JSON dataframes over active sockets for real-time parity.</div>
+                </div>
+              </div>
+
+              <div style={{ padding: "40px", background: "rgba(255,255,255,0.4)", borderRadius: "32px", border: "1px solid rgba(0,0,0,0.05)" }}>
+                <h3 className="section-heading" style={{ marginBottom: "16px" }}>Machine Learning Analytics</h3>
+                <p className="bento-desc" style={{ maxWidth: "800px" }}>
+                  Distinct from the live web application's routing logic, the core predictive capabilities were designed, evaluated, and compiled in an isolated Python pipeline before endpoint deployment.
+                </p>
+                <div className="plot-grid">
+                  <div className="plot-img-container">
+                    <img src="/ml/plots/prediction_vs_actual.png" alt="LSTM Prediction" className="plot-img" />
+                    <div className="plot-caption">LSTM Tracking accuracy over sequential steps</div>
+                  </div>
+                  <div className="plot-img-container">
+                    <img src="/ml/plots/xgboost_feature_importance.png" alt="XGBoost Features" className="plot-img" />
+                    <div className="plot-caption">XGBoost Decision Tree Feature Weights</div>
+                  </div>
+                  <div className="plot-img-container">
+                    <img src="/ml/plots/congestion_over_time.png" alt="Temporal Congestion" className="plot-img" />
+                    <div className="plot-caption">Simulated 24-hour Congestion Distribution</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </Reveal>
+        </section>
+
+
+        {/* NEXUS + LEX 3D */}
+        <section className="project-section">
+          <Reveal>
+            <div className="project-card">
+              <div className="project-tag tag-nexus">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                Local Compute Framework
+              </div>
+              
+              <h2 className="project-title title-nexus">Nexus + Lex3D Suite</h2>
+              
+              <p className="project-desc">
+                An offline, cross-modal generative framework engineered for local execution on consumer hardware. It utilizes PyTorch's Metal Performance Shaders (MPS) backend for Apple Silicon acceleration, chaining multiple diffusion models for multimedia generation.
+              </p>
+
+              <div className="action-row">
+                <a href={NEXUS_GITHUB_URL} className="btn btn-primary-nexus" target="_blank" rel="noopener noreferrer">
+                  View Repository
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+                </a>
+              </div>
+
+              <h3 className="section-heading">Nexus Multimedia Pipeline</h3>
+              <div className="architecture-flow">
+                {['Text Prompt', 'CLIP Encoder', 'Stable Diffusion v1.5', 'Generated Image Latent', 'Stable Video Diffusion', 'MP4 Output'].map((step, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    <div className="flow-node">{step}</div>
+                    {idx < arr.length - 1 && (
+                      <div className="flow-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <h3 className="section-heading">Lex3D Shape Generation (NeRF)</h3>
+              <div className="architecture-flow" style={{ marginBottom: "64px" }}>
+                {['Descriptive Prompt', 'CLIP Text Embed', 'OpenAI Shap-E', 'Implicit NeRF Field', 'Trimesh Export', 'STL File Output'].map((step, idx, arr) => (
+                  <React.Fragment key={idx}>
+                    <div className="flow-node">{step}</div>
+                    {idx < arr.length - 1 && (
+                      <div className="flow-arrow">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <h3 className="section-heading">Engineering Specs</h3>
+              <div className="bento-grid">
+                <div className="bento-item">
+                  <div className="bento-icon icon-green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </div>
+                  <div className="bento-title">Apple MPS Backend</div>
+                  <div className="bento-desc">Custom PyTorch configuration casting all tensors to the `mps` device, enabling hardware-accelerated matrix multiplication directly on Apple Silicon GPUs.</div>
+                </div>
+                
+                <div className="bento-item">
+                  <div className="bento-icon icon-blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                  </div>
+                  <div className="bento-title">Zero-API Architecture</div>
+                  <div className="bento-desc">Designed to run 100% offline without reliance on external cloud inference APIs, ensuring absolute data privacy and eliminating recurring costs.</div>
+                </div>
+
+                <div className="bento-item">
+                  <div className="bento-icon icon-orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  </div>
+                  <div className="bento-title">Attention Slicing & CPU Offloading</div>
+                  <div className="bento-desc">Chunks high-memory attention computation into sequential sub-ops and dynamically shifts inactive weights to system RAM to prevent OOM faults.</div>
+                </div>
+              </div>
+
+            </div>
+          </Reveal>
+        </section>
+
+      </div>
+
+      <footer>
+        <div>Aryan Rajesh © {new Date().getFullYear()}</div>
+        <div style={{ marginTop: "8px", opacity: 0.7 }}>Source code licensed under respective repository terms.</div>
+      </footer>
+    </div>
   );
 }
