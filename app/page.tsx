@@ -263,9 +263,9 @@ export default function Home() {
       <main className="w-full">
 
         {/* ── HERO ─────────────────────────────────────────────── */}
-        <section className="min-h-screen flex items-end px-6 md:px-12 lg:px-24 pb-24 pt-32 relative">
+        <section className="min-h-screen flex items-center px-6 md:px-12 lg:px-24 pb-24 pt-32 relative">
           
-          <div className="grid grid-cols-12 gap-y-16 lg:gap-y-0 gap-x-8 w-full items-end relative z-10">
+          <div className="grid grid-cols-12 gap-y-16 lg:gap-y-0 gap-x-8 w-full items-center relative z-10">
             {/* Left Block: Name, CTA & Bio */}
             <div className="col-span-12 lg:col-span-7 space-y-12">
               <Reveal>
