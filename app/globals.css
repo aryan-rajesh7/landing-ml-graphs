@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --color-zinc-950: #0a0a0a; /* Slightly warmer pure black */
+  --color-zinc-950: #0a0a0a;
 }
 
 @layer base {
@@ -30,52 +30,64 @@
   }
 }
 
-/* Noise overlay for that tangible print feel */
+/* Noise texture — barely perceptible, removes digital flatness */
 .bg-noise {
   position: fixed;
   inset: 0;
   z-index: 50;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.03'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
 }
 
-/* Ultra-premium animated underline link */
-.link-editorial {
+/* Editorial animated underline */
+.link-reveal {
   position: relative;
   display: inline-block;
   color: #a1a1aa;
-  transition: color 0.4s ease;
+  transition: color 0.3s ease;
 }
-.link-editorial::after {
+.link-reveal::after {
   content: '';
   position: absolute;
   width: 100%;
   transform: scaleX(0);
   height: 1px;
-  bottom: -4px;
+  bottom: -2px;
   left: 0;
   background-color: #f4f4f5;
   transform-origin: bottom right;
   transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
 }
-.link-editorial:hover {
+.link-reveal:hover {
   color: #f4f4f5;
 }
-.link-editorial:hover::after {
+.link-reveal:hover::after {
   transform: scaleX(1);
   transform-origin: bottom left;
 }
 
-/* Micro-interactions */
-.fade-in-up {
-  animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  opacity: 0;
-  transform: translateY(30px);
+/* Experience row interaction */
+.exp-row {
+  transition: background-color 0.4s ease, padding-left 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.exp-row:hover {
+  background-color: rgba(255, 255, 255, 0.02);
+  padding-left: 2rem;
 }
 
-@keyframes fadeInUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Project image slow zoom */
+.project-img-inner {
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.group:hover .project-img-inner {
+  transform: scale(1.04);
+}
+
+/* Contact link arrow animation */
+.contact-link .arrow {
+  display: inline-block;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.contact-link:hover .arrow {
+  transform: translate(4px, -4px);
 }
