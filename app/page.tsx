@@ -48,9 +48,9 @@ const Reveal = ({
 // ── Section label ─────────────────────────────────────────────────
 const SectionLabel = ({ number, label }: { number: string; label: string }) => (
   <div className="flex items-center gap-4 mb-20">
-    <span className="text-[11px] font-mono text-blue-500 tracking-widest">{number}</span>
+    <span className="text-[11px] font-mono text-blue-400 tracking-widest">{number}</span>
     <div className="h-px flex-1 bg-gradient-to-r from-blue-500/20 to-transparent" />
-    <span className="text-[11px] tracking-[0.25em] uppercase text-slate-400 font-medium">{label}</span>
+    <span className="text-[11px] tracking-[0.25em] uppercase text-slate-300 font-medium">{label}</span>
   </div>
 );
 
@@ -71,17 +71,17 @@ const ExperienceItem = ({
   delay?: number;
 }) => (
   <Reveal delay={delay}>
-    <div className="exp-row group border-b border-[#0f1629] py-10 cursor-default">
+    <div className="exp-row group border-b border-[#13223f] py-10 cursor-default">
       <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-2 mb-3">
-        <h3 className="text-xl font-medium text-slate-200 tracking-tight group-hover:text-blue-400 transition-colors">
+        <h3 className="text-xl font-medium text-slate-100 tracking-tight group-hover:text-blue-400 transition-colors">
           {role}
         </h3>
-        <span className="text-[11px] text-slate-500 font-mono tracking-widest shrink-0 group-hover:text-blue-400 transition-colors">{period}</span>
+        <span className="text-[11px] text-slate-400 font-mono tracking-widest shrink-0 group-hover:text-blue-400 transition-colors">{period}</span>
       </div>
-      <div className="text-[13px] text-slate-400 mb-4 font-medium uppercase tracking-wider">
-        {company} <span className="text-slate-700 mx-1">/</span> {location}
+      <div className="text-[13px] text-slate-300 mb-4 font-medium uppercase tracking-wider">
+        {company} <span className="text-slate-600 mx-1">/</span> {location}
       </div>
-      <p className="text-[15px] text-slate-500 leading-relaxed max-w-2xl group-hover:text-slate-300 transition-colors">
+      <p className="text-[15px] text-slate-400 leading-relaxed max-w-2xl group-hover:text-slate-200 transition-colors">
         {description}
       </p>
     </div>
@@ -109,7 +109,7 @@ const ProjectCard = ({
   <Reveal delay={delay}>
     <div className="group grid grid-cols-12 gap-8 items-center">
       {/* Image container */}
-      <div className="col-span-12 lg:col-span-7 aspect-[16/10] bg-[#0f1629]/50 overflow-hidden relative border border-[#1e293b]/50">
+      <div className="col-span-12 lg:col-span-7 aspect-[16/10] bg-[#13223f]/30 overflow-hidden relative border border-[#1e293b]/80">
         <div className="project-img-inner absolute inset-0 w-full h-full">
            <Image
              src={imagePath}
@@ -124,15 +124,15 @@ const ProjectCard = ({
       {/* Info */}
       <div className="col-span-12 lg:col-span-5 flex flex-col justify-between py-2 lg:pl-4">
         <div>
-          <h3 className="text-3xl font-medium text-slate-100 tracking-tight mb-4 group-hover:text-blue-400 transition-colors">
+          <h3 className="text-3xl font-medium text-slate-50 tracking-tight mb-4 group-hover:text-blue-400 transition-colors">
             {title}
           </h3>
-          <p className="text-[15px] text-slate-400 leading-relaxed mb-8 text-pretty">
+          <p className="text-[15px] text-slate-300 leading-relaxed mb-8 text-pretty">
             {description}
           </p>
           <div className="flex flex-wrap gap-x-4 gap-y-2 text-[11px] font-mono tracking-wider mb-10">
             {stack.map((s) => (
-              <span key={s} className="px-3 py-1 bg-[#0f1629] text-slate-300 border border-[#1e293b]">{s}</span>
+              <span key={s} className="px-3 py-1 bg-[#13223f]/50 text-slate-200 border border-[#1e293b]">{s}</span>
             ))}
           </div>
         </div>
@@ -180,13 +180,13 @@ export default function Home() {
               <h1 className="text-[clamp(3rem,11vw,9rem)] font-medium tracking-[-0.04em] text-slate-100 leading-[0.85]">
                 Aryan
                 <br />
-                <span className="text-blue-500">Rajesh</span>
+                <span className="text-blue-400">Rajesh</span>
               </h1>
             </Reveal>
 
             {/* Intro */}
             <Reveal delay={150} className="col-span-12 md:col-start-5 md:col-span-8 lg:col-start-7 lg:col-span-6">
-              <p className="text-lg md:text-xl text-slate-300 font-light leading-relaxed text-balance">
+              <p className="text-lg md:text-xl text-slate-200 font-light leading-relaxed text-balance">
                 AI Engineer specializing in Large Language Models, Generative Agents, and Machine Learning Architecture. 
                 Building scalable neural pipelines and advanced computer vision systems.
               </p>
@@ -195,14 +195,14 @@ export default function Home() {
             {/* Links */}
             <Reveal delay={250} className="col-span-12 md:col-start-5 md:col-span-8 lg:col-start-7 lg:col-span-6">
               <div className="flex items-center gap-8">
-                <a href="#work" className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold text-slate-400">
+                <a href="#work" className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold">
                   Selected Work
                 </a>
                 <a
                   href="https://github.com/aryan-rajesh7"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold text-slate-400"
+                  className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold"
                 >
                   GitHub
                 </a>
@@ -210,7 +210,7 @@ export default function Home() {
                   href="https://linkedin.com/in/aryan-rajesh7"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold text-slate-400"
+                  className="link-reveal text-[12px] tracking-[0.2em] uppercase font-semibold"
                 >
                   LinkedIn
                 </a>
@@ -227,13 +227,13 @@ export default function Home() {
 
           <div className="grid grid-cols-12 gap-6 relative">
             <Reveal delay={100} className="col-span-12 lg:col-span-10">
-              <p className="text-2xl md:text-[2.2rem] text-slate-200 font-light leading-[1.4] tracking-tight text-balance mb-16">
+              <p className="text-2xl md:text-[2.2rem] text-slate-100 font-light leading-[1.4] tracking-tight text-balance mb-16">
                 My work centers on the architecture of intelligence. From orchestrating multi-agent LLM systems and engineering RAG pipelines, to optimizing deep neural networks for real-time computer vision, my priority is always on building models that scale and reason accurately.
               </p>
             </Reveal>
 
             <Reveal delay={200} className="col-span-12 lg:col-start-5 lg:col-span-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-[16px] text-slate-400 leading-relaxed font-light">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-[16px] text-slate-300 leading-relaxed font-light">
                 <p>
                   At Flowers Foods, I architect and evaluate complex AI agent pipelines powered by LLMs. I strictly test multi-turn reasoning, intent recognition, and hallucination bounds, validating end-to-end generative workflows to ensure system reliability and context retention across enterprise architectures.
                 </p>
@@ -259,7 +259,7 @@ export default function Home() {
               stack={["PyTorch", "Generative AI", "RAG", "Gemini 2.0", "Next.js", "Python"]}
               liveUrl="https://ai-traffic-optimizer.vercel.app"
               githubUrl="https://github.com/aryan-rajesh7/ai-traffic-optimizer"
-              imagePath="/traffic-optimizer.png" // User should place this image in public/
+              imagePath="/traffic-optimizer.png"
             />
 
             <ProjectCard
@@ -267,7 +267,7 @@ export default function Home() {
               description="A generative text-to-3D asset engine deploying OpenAI's Shap-E model. Maps natural language prompts to implicit Neural Radiance Fields (NeRF), enabling the generation of 3D objects directly from text. Engineered a custom rendering pipeline that generates rotating video previews natively from neural network weights."
               stack={["Deep Learning", "PyTorch", "OpenAI Shap-E", "NeRF", "Python"]}
               githubUrl="https://github.com/aryan-rajesh7/nexus-lex3d"
-              imagePath="/lex3d.png" // User should place this image in public/
+              imagePath="/lex3d.png"
               delay={100}
             />
 
@@ -276,7 +276,7 @@ export default function Home() {
               description="An autonomous multimedia AI generation pipeline that chains text-to-image, image-to-video, and audio generation models. Transforms zero-shot text prompts into complete multimedia assets. Engineered specialized memory management for Apple Silicon (MPS) to handle sequential neural network execution and heavy tensor offloading."
               stack={["Generative Models", "PyTorch", "MPS", "React", "Transformers"]}
               githubUrl="https://github.com/aryan-rajesh7/nexus-lex3d"
-              imagePath="/nexus.png" // User should place this image in public/
+              imagePath="/nexus.png"
               delay={200}
             />
           </div>
@@ -288,7 +288,7 @@ export default function Home() {
             <SectionLabel number="03" label="Experience" />
           </Reveal>
 
-          <div className="border-t border-[#0f1629]">
+          <div className="border-t border-[#13223f]">
             <ExperienceItem
               role="AI Engineer Intern"
               company="Flowers Foods"
@@ -341,18 +341,27 @@ export default function Home() {
           <Reveal delay={100}>
             <div className="grid grid-cols-12 gap-6 relative z-10">
               <div className="col-span-12 lg:col-span-10 space-y-12">
-                <p className="text-xl md:text-[1.7rem] text-slate-400 font-light leading-relaxed text-balance">
+                
+                {/* Machine Learning */}
+                <p className="text-xl md:text-[1.7rem] text-slate-300 font-light leading-relaxed text-balance">
                   Machine Learning — <span className="text-blue-400 font-medium">PyTorch</span>, <span className="text-blue-400 font-medium">TensorFlow</span>, <span className="text-blue-400 font-medium">Scikit-learn</span>, <span className="text-blue-400 font-medium">XGBoost</span>, <span className="text-blue-400 font-medium">NumPy</span>, <span className="text-blue-400 font-medium">Pandas</span>
                 </p>
-                <p className="text-xl md:text-[1.7rem] text-slate-500 font-light leading-relaxed text-balance">
-                  LLMs & Generative AI — LangChain, Retrieval-Augmented Generation (RAG), OpenAI APIs, Transformer Architectures, Prompt Engineering, Agentic Workflows
+
+                {/* LLMs */}
+                <p className="text-xl md:text-[1.7rem] text-slate-300 font-light leading-relaxed text-balance">
+                  LLMs & Generative AI — <span className="text-blue-400 font-medium">LangChain</span>, <span className="text-blue-400 font-medium">Retrieval-Augmented Generation (RAG)</span>, <span className="text-blue-400 font-medium">OpenAI APIs</span>, <span className="text-blue-400 font-medium">Transformer Architectures</span>, <span className="text-blue-400 font-medium">Prompt Engineering</span>, <span className="text-blue-400 font-medium">Agentic Workflows</span>
                 </p>
-                <p className="text-xl md:text-[1.7rem] text-slate-600 font-light leading-relaxed text-balance">
-                  Core Languages — Python, TypeScript, Java, SQL, C++
+
+                {/* Languages */}
+                <p className="text-xl md:text-[1.7rem] text-slate-300 font-light leading-relaxed text-balance">
+                  Core Languages — <span className="text-blue-400 font-medium">Python</span>, <span className="text-blue-400 font-medium">TypeScript</span>, <span className="text-blue-400 font-medium">Java</span>, <span className="text-blue-400 font-medium">SQL</span>, <span className="text-blue-400 font-medium">C++</span>
                 </p>
-                <p className="text-xl md:text-[1.7rem] text-slate-700 font-light leading-relaxed text-balance">
-                  Infrastructure & Cloud — Docker, Kubernetes, Vector Databases, PostgreSQL, AWS, Azure, REST APIs
+
+                {/* Infrastructure */}
+                <p className="text-xl md:text-[1.7rem] text-slate-300 font-light leading-relaxed text-balance">
+                  Infrastructure & Cloud — <span className="text-blue-400 font-medium">Docker</span>, <span className="text-blue-400 font-medium">Kubernetes</span>, <span className="text-blue-400 font-medium">Vector Databases</span>, <span className="text-blue-400 font-medium">PostgreSQL</span>, <span className="text-blue-400 font-medium">AWS</span>, <span className="text-blue-400 font-medium">Azure</span>, <span className="text-blue-400 font-medium">REST APIs</span>
                 </p>
+
               </div>
             </div>
           </Reveal>
@@ -378,7 +387,7 @@ export default function Home() {
             <div className="flex flex-wrap gap-12">
               <a
                 href="mailto:aryan.raj@hotmail.com"
-                className="contact-link text-slate-400 hover:text-white transition-colors text-lg font-medium tracking-wide"
+                className="contact-link text-slate-300 hover:text-white transition-colors text-lg font-medium tracking-wide"
               >
                 aryan.raj@hotmail.com <span className="arrow">↗</span>
               </a>
@@ -386,7 +395,7 @@ export default function Home() {
                 href="https://github.com/aryan-rajesh7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="contact-link text-slate-400 hover:text-white transition-colors text-lg font-medium tracking-wide"
+                className="contact-link text-slate-300 hover:text-white transition-colors text-lg font-medium tracking-wide"
               >
                 GitHub <span className="arrow">↗</span>
               </a>
@@ -394,7 +403,7 @@ export default function Home() {
                 href="https://linkedin.com/in/aryan-rajesh7"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="contact-link text-slate-400 hover:text-white transition-colors text-lg font-medium tracking-wide"
+                className="contact-link text-slate-300 hover:text-white transition-colors text-lg font-medium tracking-wide"
               >
                 LinkedIn <span className="arrow">↗</span>
               </a>
@@ -404,14 +413,14 @@ export default function Home() {
       </main>
 
       {/* ── FOOTER ──────────────────────────────────────────── */}
-      <footer className="px-6 md:px-12 lg:px-24 py-16 border-t border-[#0f1629]">
+      <footer className="px-6 md:px-12 lg:px-24 py-16 border-t border-[#13223f]">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div>
-            <span className="text-[13px] text-slate-400 font-medium">Aryan Rajesh</span>
+            <span className="text-[13px] text-slate-300 font-medium">Aryan Rajesh</span>
             <span className="text-slate-800 mx-3">/</span>
-            <span className="text-[13px] text-slate-600">U.S. Citizen</span>
+            <span className="text-[13px] text-slate-500">U.S. Citizen</span>
           </div>
-          <span className="text-[11px] text-slate-600 font-mono tracking-widest">
+          <span className="text-[11px] text-slate-500 font-mono tracking-widest">
             © {new Date().getFullYear()}
           </span>
         </div>

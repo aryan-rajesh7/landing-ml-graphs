@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-midnight-base: #080c16;
-  --color-midnight-surface: #0f1629;
+  --color-midnight-base: #0b1528; /* Beautiful, deep slate blue background (definitely not black) */
+  --color-midnight-surface: #13223f; /* Slightly lighter slate blue for cards/elements */
 }
 
 @layer base {
@@ -12,12 +12,12 @@
   }
   body {
     background-color: var(--color-midnight-base);
-    color: #f1f5f9;
+    color: #e2e8f0; /* Soft slate/off-white text for excellent contrast and readability */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
-    background-color: rgba(59, 130, 246, 0.2);
+    background-color: rgba(59, 130, 246, 0.3);
     color: #ffffff;
   }
 }
@@ -73,7 +73,7 @@
   border-left: 2px solid transparent;
 }
 .exp-row:hover {
-  background-color: rgba(59, 130, 246, 0.03);
+  background-color: rgba(59, 130, 246, 0.04);
   border-left-color: #3b82f6;
   padding-left: 2rem;
 }
