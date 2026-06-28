@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-  --color-zinc-950: #05050a; /* Deepened the black with a hint of blue/purple */
+  --color-midnight-base: #080c16;
+  --color-midnight-surface: #0f1629;
 }
 
 @layer base {
@@ -10,13 +11,13 @@
     font-size: 16px;
   }
   body {
-    background-color: var(--color-zinc-950);
-    color: #f4f4f5;
+    background-color: var(--color-midnight-base);
+    color: #f1f5f9;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
-    background-color: rgba(99, 102, 241, 0.3); /* Indigo selection */
+    background-color: rgba(59, 130, 246, 0.2);
     color: #ffffff;
   }
 }
@@ -28,24 +29,6 @@
   .text-pretty {
     text-wrap: pretty;
   }
-  
-  /* Rich AI Gradient Text */
-  .text-gradient-ai {
-    background-image: linear-gradient(to right, #818cf8, #c084fc, #f472b6);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  /* Subtle colored glow for cards */
-  .glow-card {
-    box-shadow: 0 0 40px -10px rgba(99, 102, 241, 0.15);
-    transition: box-shadow 0.4s ease, transform 0.4s ease;
-  }
-  .glow-card:hover {
-    box-shadow: 0 0 60px -15px rgba(192, 132, 252, 0.25);
-    transform: translateY(-2px);
-  }
 }
 
 /* Noise texture — barely perceptible, removes digital flatness */
@@ -54,14 +37,14 @@
   inset: 0;
   z-index: 50;
   pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.025'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.02'/%3E%3C/svg%3E");
 }
 
-/* Editorial animated underline with color */
+/* Editorial animated underline with blue accent */
 .link-reveal {
   position: relative;
   display: inline-block;
-  color: #a1a1aa;
+  color: #94a3b8;
   transition: color 0.3s ease;
 }
 .link-reveal::after {
@@ -70,14 +53,14 @@
   width: 100%;
   transform: scaleX(0);
   height: 1px;
-  bottom: -2px;
+  bottom: -4px;
   left: 0;
-  background-image: linear-gradient(to right, #818cf8, #c084fc);
+  background-color: #3b82f6;
   transform-origin: bottom right;
   transition: transform 0.4s cubic-bezier(0.86, 0, 0.07, 1);
 }
 .link-reveal:hover {
-  color: #f4f4f5;
+  color: #f8fafc;
 }
 .link-reveal:hover::after {
   transform: scaleX(1);
@@ -90,8 +73,8 @@
   border-left: 2px solid transparent;
 }
 .exp-row:hover {
-  background-color: rgba(99, 102, 241, 0.03);
-  border-left-color: #a78bfa;
+  background-color: rgba(59, 130, 246, 0.03);
+  border-left-color: #3b82f6;
   padding-left: 2rem;
 }
 
@@ -107,7 +90,7 @@
 .contact-link .arrow {
   display: inline-block;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  color: #c084fc;
+  color: #3b82f6;
 }
 .contact-link:hover .arrow {
   transform: translate(4px, -4px);

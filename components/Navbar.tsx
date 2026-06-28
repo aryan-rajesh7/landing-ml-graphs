@@ -16,14 +16,14 @@ export default function Navbar() {
     <nav
       className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         scrolled
-          ? "bg-[#0a0a0a]/80 backdrop-blur-md border-b border-zinc-900/50 py-4"
+          ? "bg-[#080c16]/80 backdrop-blur-md border-b border-[#0f1629] py-4"
           : "bg-transparent py-6"
       }`}
     >
       <div className="w-full px-6 md:px-12 lg:px-24 flex items-center justify-between">
         <Link
           href="/"
-          className="text-zinc-300 text-sm font-medium tracking-tight hover:text-zinc-100 transition-colors"
+          className="text-slate-300 text-sm font-medium tracking-tight hover:text-white transition-colors"
         >
           AR
         </Link>
