@@ -327,7 +327,7 @@ export default function Home() {
             {/* Philosophy Statement */}
             <Reveal delay={100} className="col-span-12 lg:col-span-7">
               <p className="text-3xl md:text-4xl text-slate-100 font-light leading-[1.35] tracking-tight text-balance">
-                I build machine learning architectures where reasoning, speed, and evaluation meet. My focus is on scaling generative agent pipelines and designing deep learning models that solve complex NLP, vision, and signal processing challenges.
+                I build Large Language Model architectures and generative AI agents where reasoning, speed, and evaluation meet. My focus is on scaling multi-agent workflows and designing deep learning models that solve complex NLP, vision, and signal processing challenges.
               </p>
             </Reveal>
 
