@@ -124,7 +124,7 @@ const ProjectCard = ({
       {/* Info */}
       <div className="col-span-12 lg:col-span-5 flex flex-col justify-between py-2 lg:pl-4">
         <div>
-          <h3 className="text-3xl font-medium text-slate-50 tracking-tight mb-4 group-hover:text-blue-400 transition-colors">
+          <h3 className="text-3xl font-medium text-slate-100 tracking-tight mb-4 group-hover:text-blue-400 transition-colors">
             {title}
           </h3>
           <p className="text-[15px] text-slate-300 leading-relaxed mb-8 text-pretty">
@@ -225,20 +225,34 @@ export default function Home() {
             <SectionLabel number="01" label="About" />
           </Reveal>
 
-          <div className="grid grid-cols-12 gap-6 relative">
-            <Reveal delay={100} className="col-span-12 lg:col-span-10">
-              <p className="text-2xl md:text-[2.2rem] text-slate-100 font-light leading-[1.4] tracking-tight text-balance mb-16">
-                My work centers on the architecture of intelligence. From orchestrating multi-agent LLM systems and engineering RAG pipelines, to optimizing deep neural networks for real-time computer vision, my priority is always on building models that scale and reason accurately.
+          <div className="grid grid-cols-12 gap-y-12 gap-x-8 relative">
+            {/* Philosophy Statement */}
+            <Reveal delay={100} className="col-span-12 lg:col-span-7">
+              <p className="text-3xl md:text-4xl text-slate-100 font-light leading-[1.35] tracking-tight text-balance">
+                I design and build machine learning systems where reasoning, speed, and evaluation meet. My focus is on scaling generative agent pipelines and developing robust deep learning models that process signals accurately under constraints.
               </p>
             </Reveal>
 
-            <Reveal delay={200} className="col-span-12 lg:col-start-5 lg:col-span-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 text-[16px] text-slate-300 leading-relaxed font-light">
-                <p>
-                  At Flowers Foods, I architect and evaluate complex AI agent pipelines powered by LLMs. I strictly test multi-turn reasoning, intent recognition, and hallucination bounds, validating end-to-end generative workflows to ensure system reliability and context retention across enterprise architectures.
+            {/* Asymmetric Core Focus List */}
+            <Reveal delay={200} className="col-span-12 lg:col-start-9 lg:col-span-4 space-y-10">
+              <div className="border-t border-[#13223f] pt-6">
+                <h4 className="text-[11px] tracking-[0.2em] uppercase text-blue-400 font-medium mb-3">Agent Evaluation</h4>
+                <p className="text-[14px] text-slate-300 leading-relaxed font-light">
+                  Rigorous stress-testing of multi-turn reasoning, intent accuracy, and context bounds in production-level LLM workflows.
                 </p>
-                <p>
-                  At UC Irvine, my research dives deep into applied machine learning. I develop denoising neural networks for a MiniAn-based pipeline, analyzing massive 1-photon neuron imaging datasets to extract high-fidelity biological signals and benchmark advanced preprocessing techniques.
+              </div>
+
+              <div className="border-t border-[#13223f] pt-6">
+                <h4 className="text-[11px] tracking-[0.2em] uppercase text-blue-400 font-medium mb-3">Signal Denoising</h4>
+                <p className="text-[14px] text-slate-300 leading-relaxed font-light">
+                  Developing deep learning architectures to extract high-fidelity biological patterns from high-noise imaging datasets.
+                </p>
+              </div>
+
+              <div className="border-t border-[#13223f] pt-6">
+                <h4 className="text-[11px] tracking-[0.2em] uppercase text-blue-400 font-medium mb-3">Architecting Inference</h4>
+                <p className="text-[14px] text-slate-300 leading-relaxed font-light">
+                  Orchestrating retrieval-augmented systems, vector indexes, and specialized memory management for efficient execution.
                 </p>
               </div>
             </Reveal>
